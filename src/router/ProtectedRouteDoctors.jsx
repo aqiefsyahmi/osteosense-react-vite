@@ -31,15 +31,14 @@ const ProtectedRouteDoctors = () => {
 
       <div className="text-9xl font-bold text-[#4A00FF]">401</div>
       <div className="text-lg font-semibold ">
-        You are not authorized for this actions
+        You are not authorized for this action.
       </div>
       <div className="text-md font-semibold ">
-        Go back?{" "}
         <button
           className="text-md font-bold link link-primary place-items-center place-content-center"
           onClick={handleGoBack}
         >
-          Yes
+          Go back
         </button>
       </div>
     </div>

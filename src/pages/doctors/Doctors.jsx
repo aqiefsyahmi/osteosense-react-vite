@@ -28,7 +28,7 @@
 //         const res = response.data;
 //         res.access_token && props.setToken(res.access_token);
 //         setProfileData({
-//           profile_name: res.name,
+//           profile_username: res.name,
 //           profile_email: res.email,
 //           about_me: res.about,
 //         });
@@ -113,7 +113,7 @@
 //   );
 // }
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 // import Navigation from "../components/NavigationDoctors";
 import { useNavigate } from "react-router-dom";
 
@@ -141,7 +141,7 @@ export default function Doctors(props) {
         const res = response.data;
         res.access_token && props.setToken(res.access_token);
         setProfileData({
-          profile_name: res.name,
+          profile_username: res.username,
           profile_email: res.email,
           about_me: res.about,
         });

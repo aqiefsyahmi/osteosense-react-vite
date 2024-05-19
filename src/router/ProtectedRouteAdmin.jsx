@@ -32,7 +32,7 @@ const ProtectedRouteAdmin = () => {
 
       <div className="text-9xl font-bold text-[#4A00FF]">401</div>
       <div className="text-lg font-semibold ">
-        You are not authorized for this actions
+        You are not authorized for this action.
       </div>
       <div className="text-md font-semibold ">
         Go back?{" "}
