@@ -61,7 +61,7 @@ function App() {
                     element={<AdminEditDoctors />}
                   />
                   <Route
-                    path="/doctor/:id/edit"
+                    path="/admineditdoctor/:id/edit"
                     element={<AdminEditDoctorsDetail />}
                   />
                   <Route
@@ -77,7 +77,7 @@ function App() {
                     element={<AdminReportAnalysisDetails />}
                   />
                   <Route
-                    path="/manageprofileadmin"
+                    path="/manageprofileadmin/:id/edit"
                     element={<ManageProfileAdmin />}
                   />
 
@@ -90,7 +90,7 @@ function App() {
                 <Route element={<DoctorsHeader removeToken={removeToken} />}>
                   <Route path="/doctors" element={<Doctors />} exact />
                   <Route
-                    path="/manageprofiledoctors"
+                    path="/manageprofiledoctors/:id/edit"
                     element={<ManageProfileDoctors />}
                   />
                   <Route
@@ -107,7 +107,7 @@ function App() {
                   />
                   <Route path="/patientlist" element={<PatientList />} />
                   <Route
-                    path="/manageprofilepatients" //
+                    path="/patientupdate/:id/edit" //
                     element={<ManageProfilePatients />}
                   />
                   <Route

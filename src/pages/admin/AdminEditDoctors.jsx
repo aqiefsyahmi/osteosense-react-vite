@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 // import Header from "../components/Header";
 // import Navigation from "../components/NavigationAdmin";
 import axios from "axios";
+import DeleteConfirmation from "../../components/DeleteConfirmation";
 
 // import api from "../api";
 
@@ -9,6 +10,8 @@ import { Link } from "react-router-dom";
 
 const AdminEditDoctors = () => {
   const [doctor, setDoctor] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [doctorIdToDelete, setDoctorIdToDelete] = useState(null);
 
   useEffect(() => {
     getDoctor();
@@ -21,14 +24,23 @@ const AdminEditDoctors = () => {
     });
   }
 
-  const deleteUser = (id) => {
+  const handleDeleteClick = (id) => {
+    setDoctorIdToDelete(id);
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = () => {
     axios
-      .delete(`http://127.0.0.1:5000/doctordelete/${id}`)
-      .then(function (response) {
+      .delete(`http://127.0.0.1:5000/doctordelete/${doctorIdToDelete}`)
+      .then((response) => {
         console.log(response.data);
         // Refresh the list of users after deletion
         getDoctor();
+      })
+      .catch((error) => {
+        console.error("There was an error deleting the doctor!", error);
       });
+    setShowModal(false);
     alert("Successfully Deleted");
   };
 
@@ -59,14 +71,14 @@ const AdminEditDoctors = () => {
               <td>
                 <Link
                   className="btn btn-sm btn-primary"
-                  to={`/doctor/${doctor.id}/edit`}
+                  to={`/admineditdoctor/${doctor.id}/edit`}
                 >
                   Update Info
                 </Link>
               </td>
               <td>
                 <button
-                  onClick={() => deleteUser(doctor.id)}
+                  onClick={() => handleDeleteClick(doctor.id)}
                   className="btn btn-sm btn-danger ms-2"
                 >
                   Delete
@@ -76,6 +88,12 @@ const AdminEditDoctors = () => {
           ))}
         </tbody>
       </table>
+
+      <DeleteConfirmation
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        handleConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

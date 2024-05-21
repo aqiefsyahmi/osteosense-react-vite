@@ -1,15 +1,45 @@
-// import React from "react";
-// import Header from "../components/Header";
-// import Navigation from "../components/NavigationDoctors";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import DeleteConfirmation from "../../components/DeleteConfirmation";
 
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const PatientList = () => {
-  const navigate = useNavigate();
+  const [patient, setPatient] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [patientIdToDelete, setPatientIdToDelete] = useState(null);
 
-  const editprofile = () => {
-    navigate("/manageprofilepatients");
+  useEffect(() => {
+    getPatient();
+  }, []);
+
+  function getPatient() {
+    axios.get("http://127.0.0.1:5000/listpatients").then(function (response) {
+      console.log(response.data);
+      setPatient(response.data);
+    });
+  }
+
+  const handleDeleteClick = (id) => {
+    setPatientIdToDelete(id);
+    setShowModal(true);
   };
+
+  const handleConfirmDelete = () => {
+    axios
+      .delete(`http://127.0.0.1:5000/patientdelete/${patientIdToDelete}`)
+      .then((response) => {
+        console.log(response.data);
+        // Refresh the list of users after deletion
+        getPatient();
+      })
+      .catch((error) => {
+        console.error("There was an error deleting the doctor!", error);
+      });
+    setShowModal(false);
+    alert("Successfully Deleted");
+  };
+
   return (
     <>
       {/* <Header />
@@ -18,29 +48,46 @@ const PatientList = () => {
       <table className="table table-striped table-border table-hover">
         <thead>
           <tr>
-            <th>No.</th>
-            <th>Name</th>
+            <th>Patient Full Name</th>
             <th>Age</th>
+            <th>Email</th>
+            <th>Phone No.</th>
             <th>Information</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Ahmad Farhan</td>
-            <td>50</td>
-            <td>
-              <button className="btn btn-sm btn-primary" onClick={editprofile}>
-                Edit Profile
-              </button>
-            </td>
-            <td>
-              <button className="btn btn-sm btn-danger">Delete</button>
-            </td>
-          </tr>
+          {patient.map((patient, key) => (
+            <tr key={key}>
+              <td>{patient.fullname}</td>
+              <td>{patient.age}</td>
+              <td>{patient.email}</td>
+              <td>{patient.phoneno}</td>
+              <td>
+                <Link
+                  className="btn btn-sm btn-primary"
+                  to={`/patientupdate/${patient.id}/edit`}
+                >
+                  Update Info
+                </Link>
+              </td>
+              <td>
+                <button
+                  onClick={() => handleDeleteClick(patient.id)}
+                  className="btn btn-sm btn-danger ms-2"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      <DeleteConfirmation
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        handleConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

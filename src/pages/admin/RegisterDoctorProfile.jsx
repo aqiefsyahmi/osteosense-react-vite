@@ -38,7 +38,7 @@ const RegisterDoctorProfile = () => {
       .post("http://127.0.0.1:5000/signupdoctor", inputs)
       .then(function (response) {
         console.log(response.data);
-        // Navigate to the "/admin" route after successful user creation
+        alert("Doctor Successfully Registered");
         navigate("/admin");
       })
       .catch(function (error) {
@@ -57,6 +57,7 @@ const RegisterDoctorProfile = () => {
           name="fullname"
           value={inputs.fullname}
           onChange={handleInputChange}
+          required
         />
         <div>Username</div>
         <input
@@ -65,6 +66,7 @@ const RegisterDoctorProfile = () => {
           name="username"
           value={inputs.username}
           onChange={handleInputChange}
+          required
         />
         <div>Email</div>
         <input
@@ -73,6 +75,7 @@ const RegisterDoctorProfile = () => {
           name="email"
           value={inputs.email}
           onChange={handleInputChange}
+          required
         />
         <div>Password</div>
         <input
@@ -81,6 +84,7 @@ const RegisterDoctorProfile = () => {
           name="password"
           value={inputs.password}
           onChange={handleInputChange}
+          required
         />
         <div>Phone No.</div>
         <input
@@ -89,6 +93,7 @@ const RegisterDoctorProfile = () => {
           name="phoneno"
           value={inputs.phoneno}
           onChange={handleInputChange}
+          required
         />
         <button type="submit" className="btn btn-sm btn-primary">
           Register

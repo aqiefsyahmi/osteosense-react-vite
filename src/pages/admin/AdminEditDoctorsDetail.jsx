@@ -48,7 +48,7 @@ const AdminEditDoctorsDetail = () => {
 
     try {
       await axios.put(`http://127.0.0.1:5000/doctorupdate/${id}`, updateData);
-      alert("Doctor Profle Successfully Updated!");
+      alert("Doctor Profile Successfully Updated!");
       navigate("/admineditdoctors");
     } catch (error) {
       console.error("There was an error updating the doctor details!", error);
@@ -70,6 +70,7 @@ const AdminEditDoctorsDetail = () => {
           className="form-control"
           name="fullname"
           onChange={handleChange}
+          required
         />
         <div>Username</div>
         <input
@@ -78,6 +79,7 @@ const AdminEditDoctorsDetail = () => {
           className="form-control"
           name="username"
           onChange={handleChange}
+          required
         />
         <div>Email</div>
         <input
@@ -86,6 +88,7 @@ const AdminEditDoctorsDetail = () => {
           className="form-control"
           name="email"
           onChange={handleChange}
+          required
         />
         <div>Password</div>
         <input
@@ -94,6 +97,7 @@ const AdminEditDoctorsDetail = () => {
           name="password"
           onChange={handleChange}
           value={inputs.password}
+          required
         />
         <div>Confirm Password</div>
         <input
@@ -111,6 +115,7 @@ const AdminEditDoctorsDetail = () => {
           className="form-control"
           name="phoneno"
           onChange={handleChange}
+          required
         />
         <button className="btn btn-sm btn-primary" type="submit">
           Save
