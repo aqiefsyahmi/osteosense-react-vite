@@ -1,26 +1,43 @@
-// import React from "react";
-// import Header from "../components/Header";
-// import Navigation from "../components/NavigationDoctors";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const DoctorsReportAnalysisDetails = () => {
+  const { id } = useParams();
+  const [patientData, setPatientData] = useState(null);
+
+  useEffect(() => {
+    getPredict();
+  }, []);
+
+  const getPredict = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:5000/listpredictdetails/${id}`
+      );
+      setPatientData(response.data);
+    } catch (error) {
+      console.error("There was an error fetching the patient details!", error);
+    }
+  };
+
   return (
     <>
-      {/* <Header />
-      <Navigation /> */}
-      <h1>Detail History Analysis</h1>
-      <h5>Name</h5>
-      <div>Nur Rokiah</div>
-      <h5>Age</h5>
-      <div>67</div>
-      <h5>Doctor Name</h5>
-      <div>Dr. Ali Bin Abu</div>
-      <h5>Test Date</h5>
-      <div>12/01/2023</div>
-      <h5>Test Time</h5>
-      <div>12.23 pm - 12.28 pm</div>
-      <div>5 min 10 sec</div>
-      <h5>Result Analysis:</h5>
-      <div>Normal</div>
+      <div className="font-bold">Detail History Analysis</div>
+      <div className="font-semibold">Patient Name</div>
+      <div>{patientData?.fullname}</div>
+      <div className="font-semibold">Age</div>
+      <div>{patientData?.age}</div>
+      <div className="font-semibold">Gender</div>
+      <div>{patientData?.gender}</div>
+      <div className="font-semibold">Date/Time Test</div>
+      <div>{patientData?.datetimeprediction}</div>
+      <div className="font-semibold">Result Analysis:</div>
+      <div>{patientData?.resultprediction}</div>
+      <div className="font-semibold">Email:</div>
+      <div>{patientData?.email}</div>
+      <div className="font-semibold">Phone No.:</div>
+      <div>{patientData?.phoneno}</div>
     </>
   );
 };

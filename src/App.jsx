@@ -102,7 +102,7 @@ function App() {
                     element={<DoctorsReportAnalysis />}
                   />
                   <Route
-                    path="/doctorsreportanalysisdetails"
+                    path="/predictlistdetails/:id/edit"
                     element={<DoctorsReportAnalysisDetails />}
                   />
                   <Route path="/patientlist" element={<PatientList />} />

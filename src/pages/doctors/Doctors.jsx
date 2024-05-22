@@ -46,7 +46,7 @@ export default function Doctors() {
     // Perform your login logic here
 
     // Navigate to the "admin" page if login is successful
-    navigate("/registerpatients");
+    navigate("/imageprediction");
   };
   const DoctorsReportAnalysis = () => {
     // Perform your login logic here
