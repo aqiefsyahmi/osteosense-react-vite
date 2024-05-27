@@ -50,6 +50,7 @@ export default function AdminHeader(props) {
       .then(() => {
         props.removeToken(); // Corrected function call to remove the token
         localStorage.removeItem("email");
+        localStorage.removeItem("id");
         navigate("/");
       })
       .catch((error) => {

@@ -50,6 +50,7 @@ const PatientList = () => {
           <tr>
             <th>Patient Full Name</th>
             <th>Age</th>
+            <th>Gender</th>
             <th>Email</th>
             <th>Phone No.</th>
             <th>Information</th>
@@ -61,6 +62,7 @@ const PatientList = () => {
             <tr key={key}>
               <td>{patient.fullname}</td>
               <td>{patient.age}</td>
+              <td>{patient.gender}</td>
               <td>{patient.email}</td>
               <td>{patient.phoneno}</td>
               <td>

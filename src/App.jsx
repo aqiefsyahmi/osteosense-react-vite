@@ -17,15 +17,14 @@ import DoctorsReportAnalysisDetails from "./pages/doctors/DoctorsReportAnalysisD
 import PatientList from "./pages/doctors/PatientList";
 import ManageProfilePatients from "./pages/doctors/ManageProfilePatients";
 import ImagePrediction from "./pages/doctors/ImagePrediction";
-import ListUserPage from "./pages/ListUserPage";
-import CreateUser from "./pages/CreateUser";
-import EditUser from "./pages/EditUser";
 import useToken from "./pages/useToken";
 import AdminHeader from "./components/AdminHeader";
 import DoctorsHeader from "./components/DoctorsHeader";
 import ProtectedRouteAdmin from "./router/ProtectedRouteAdmin";
 import ProtectedRouteDoctors from "./router/ProtectedRouteDoctors";
 import NotFoundPage from "./router/NotFoundPage";
+
+import ImageUpload from "../src/pages/ImageUpload";
 
 function App() {
   const { token, removeToken, setToken } = useToken();
@@ -37,13 +36,14 @@ function App() {
     setRole(isAdmin ? "admin" : "doctor");
     alert("Successfully Login");
     localStorage.setItem("email", response.data.email);
+    localStorage.setItem("id", response.data.id);
     localStorage.setItem("role", isAdmin ? "admin" : "doctor");
   };
 
   return (
     <div className="vh-100 gradient-custom">
       <Router>
-        {!token && token !== "" && token !== undefined ? (
+        {token === null || token === undefined ? (
           <Login setToken={setToken} handleLogin={handleLogin} />
         ) : (
           <>
@@ -69,21 +69,18 @@ function App() {
                     element={<AdminReportAnalysisList />}
                   />
                   <Route
-                    path="/adminreportanalysis"
+                    path="/adminreportanalysislist/:id/doctorlist"
                     element={<AdminReportAnalysis />}
                   />
                   <Route
-                    path="/adminreportanalysisdetails"
+                    path="/adminpredictlistdetails/:id/edit"
                     element={<AdminReportAnalysisDetails />}
                   />
                   <Route
                     path="/manageprofileadmin/:id/edit"
                     element={<ManageProfileAdmin />}
                   />
-
-                  <Route path="/test" element={<ListUserPage />} />
-                  <Route path="/addnewuser" element={<CreateUser />} />
-                  <Route path="/user/:id/edit" element={<EditUser />} />
+                  <Route path="/upload-image" element={<ImageUpload />} />
                 </Route>
               </Route>
               <Route element={<ProtectedRouteDoctors />}>

@@ -52,6 +52,7 @@ export default function DoctorsHeader(props) {
       .then(() => {
         props.removeToken();
         localStorage.removeItem("email");
+        localStorage.removeItem("id");
         navigate("/");
       })
       .catch((error) => {

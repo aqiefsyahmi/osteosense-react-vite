@@ -45,6 +45,10 @@ export default function Admin() {
     navigate("/adminreportanalysislist");
   };
 
+  const testimage = () => {
+    navigate("/upload-image");
+  };
+
   return (
     <>
       {/* <Header /> */}
@@ -84,10 +88,9 @@ export default function Admin() {
         <button className="btn btn-sm btn-primary" onClick={historyanalysis}>
           See History Report Analysis
         </button>
-
-        <Link to="/test" className="btn btn-success">
-          Test Page
-        </Link>
+        <button className="btn btn-sm btn-primary" onClick={testimage}>
+          Test Upload Image
+        </button>
       </table>
     </>
   );

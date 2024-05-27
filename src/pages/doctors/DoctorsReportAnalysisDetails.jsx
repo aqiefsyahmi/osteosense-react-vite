@@ -21,6 +21,21 @@ const DoctorsReportAnalysisDetails = () => {
     }
   };
 
+  const formatDateTime = (datetime) => {
+    const date = new Date(datetime);
+    const formattedDate = date.toLocaleDateString("en-GB"); // dd/mm/yyyy
+    const formattedTime = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }); // hh:mm am/pm
+    return { date: formattedDate, time: formattedTime };
+  };
+
+  const formattedDateTime = patientData
+    ? formatDateTime(patientData.datetimeprediction)
+    : null;
+
   return (
     <>
       <div className="font-bold">Detail History Analysis</div>
@@ -30,8 +45,10 @@ const DoctorsReportAnalysisDetails = () => {
       <div>{patientData?.age}</div>
       <div className="font-semibold">Gender</div>
       <div>{patientData?.gender}</div>
-      <div className="font-semibold">Date/Time Test</div>
-      <div>{patientData?.datetimeprediction}</div>
+      <div className="font-semibold">Date Prediction</div>
+      <div>{formattedDateTime?.date}</div>
+      <div className="font-semibold">Time Prediction</div>
+      <div>{formattedDateTime?.time}</div>
       <div className="font-semibold">Result Analysis:</div>
       <div>{patientData?.resultprediction}</div>
       <div className="font-semibold">Email:</div>
