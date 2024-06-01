@@ -9,10 +9,10 @@ const PredictDeleteConfirmation = ({ show, handleClose, handleConfirm }) => {
       </Modal.Header>
       <Modal.Body>Are you sure you want to delete this prediction?</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button className="btn" onClick={handleClose}>
           Cancel
         </Button>
-        <Button className="btn btn-error" onClick={handleConfirm}>
+        <Button className="btn btn-error text-white" onClick={handleConfirm}>
           Yes, Delete
         </Button>
       </Modal.Footer>

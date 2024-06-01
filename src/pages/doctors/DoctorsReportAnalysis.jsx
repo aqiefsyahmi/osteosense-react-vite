@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PredictDeleteConfirmation from "../../components/PredictDeleteConfirmation";
+import moment from "moment-timezone";
 
 const DoctorsReportAnalysis = () => {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ const DoctorsReportAnalysis = () => {
             <th>Gender</th>
             <th>Age</th>
             <th>Prediction</th>
+            <th>Date Prediction</th>
             <th>Information</th>
             <th>Action</th>
           </tr>
@@ -87,6 +89,9 @@ const DoctorsReportAnalysis = () => {
                     {predict.resultprediction}
                   </td>
                   <td>
+                    {moment(predict.datetimeprediction).format("DD MMM YYYY")}
+                  </td>
+                  <td>
                     <button
                       className="btn btn-sm btn-primary"
                       onClick={() => handlePredictionDetailsClick(predict.id)}
@@ -97,7 +102,7 @@ const DoctorsReportAnalysis = () => {
                   <td>
                     <button
                       onClick={() => handleDeleteClick(predict.id)}
-                      className="btn btn-sm btn-danger ms-2"
+                      className="btn btn-sm btn-error text-white ms-2"
                     >
                       Delete
                     </button>

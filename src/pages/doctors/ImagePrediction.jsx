@@ -14,9 +14,9 @@ export default function ImagePrediction() {
     doctorid: "",
     datetimeprediction: "",
     resultprediction: "",
+    imageprediction: "",
   });
   const [selectedPatient, setSelectedPatient] = useState("");
-  const [predictionResult, setPredictionResult] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -25,10 +25,6 @@ export default function ImagePrediction() {
   useEffect(() => {
     getDoctors();
     getPatients();
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      datetimeprediction: getMalaysiaTime(), // Initial datetime in Malaysia time
-    }));
   }, []); // Empty array ensures this effect runs only once
 
   const getMalaysiaTime = () => {
@@ -41,6 +37,12 @@ export default function ImagePrediction() {
     const formData = new FormData();
     formData.append("file", file);
 
+    const currentMalaysiaTime = getMalaysiaTime();
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      datetimeprediction: currentMalaysiaTime,
+    }));
+
     await axios
       .post("http://127.0.0.1:5000/predict", formData, {
         headers: {
@@ -50,10 +52,10 @@ export default function ImagePrediction() {
       })
       .then((response) => {
         const result = response.data;
-        setPredictionResult(result); // Update the predictionResult state with the result object
         setInputs((prevInputs) => ({
           ...prevInputs,
-          resultprediction: result.class, // Update the resultprediction field with the class from the result object
+          resultprediction: result.class,
+          imageprediction: result.imageprediction,
         }));
       })
       .catch((error) => {
@@ -126,7 +128,6 @@ export default function ImagePrediction() {
       .post("http://127.0.0.1:5000/addprediction", {
         ...inputs,
         datetimeprediction: getMalaysiaTime(), // Ensure datetimeprediction is in Malaysia time
-        resultprediction: predictionResult.class, // Include the result prediction
       })
       .then((response) => {
         console.log(response.data);
@@ -141,6 +142,7 @@ export default function ImagePrediction() {
           doctorid: inputs.doctorid, // Retain doctorid for potential further submissions
           datetimeprediction: getMalaysiaTime(), // Reset datetimeprediction to current Malaysia time
           resultprediction: "",
+          imageprediction: "",
         });
         setSelectedFile(null); // Reset file input
         setSelectedPatient(""); // Reset selected patient
@@ -159,13 +161,12 @@ export default function ImagePrediction() {
       gender: "",
       email: "",
       phoneno: "",
-      doctorid: "",
-      datetimeprediction: getMalaysiaTime(), // Reset datetimeprediction to current Malaysia time
+      datetimeprediction: "", // Reset datetimeprediction to current Malaysia time
       resultprediction: "",
+      imageprediction: "",
     });
     setSelectedFile(null);
     setSelectedPatient("");
-    setPredictionResult("");
     document.getElementById("file-upload").value = null; // Clear file input field
   };
 
@@ -183,7 +184,7 @@ export default function ImagePrediction() {
       <div className="pt-1 pb-2">
         <label className="input input-bordered flex items-center gap-2">
           <select value={selectedPatient} onChange={handlePatientChange}>
-            <option value="">Select Patient</option>
+            <option value="">--Select a patient--</option>
             {patients.map((patient) => (
               <option key={patient.id} value={patient.id}>
                 {patient.fullname}
@@ -192,12 +193,117 @@ export default function ImagePrediction() {
           </select>
         </label>
       </div>
-      <button className="btn btn-sm btn-primary" onClick={handleSubmit}>
-        Submit and Save
-      </button>
-      <button className="btn btn-sm btn-danger" onClick={handleReset}>
-        Reset
-      </button>
+      <form onSubmit={handleSubmit}>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">Fullname:</label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              name="fullname"
+              value={inputs.fullname}
+              onChange={(e) =>
+                setInputs({ ...inputs, fullname: e.target.value })
+              }
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">Age:</label>
+          <div className="col-sm-10">
+            <input
+              type="number"
+              className="form-control"
+              name="age"
+              value={inputs.age}
+              onChange={(e) => setInputs({ ...inputs, age: e.target.value })}
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">Gender:</label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              name="gender"
+              value={inputs.gender}
+              onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">Email:</label>
+          <div className="col-sm-10">
+            <input
+              type="email"
+              className="form-control"
+              name="email"
+              value={inputs.email}
+              onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">Phone No:</label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              name="phoneno"
+              value={inputs.phoneno}
+              onChange={(e) =>
+                setInputs({ ...inputs, phoneno: e.target.value })
+              }
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">
+            Datetime Prediction:
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              name="datetimeprediction"
+              value={inputs.datetimeprediction}
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <label className="col-sm-2 col-form-label">Result Prediction:</label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control"
+              name="resultprediction"
+              value={inputs.resultprediction}
+              readOnly
+            />
+          </div>
+        </div>
+        <div className="row mb-2">
+          <div className="col-sm-10 offset-sm-2">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary ms-2"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </form>
     </>
   );
 }

@@ -24,8 +24,6 @@ import ProtectedRouteAdmin from "./router/ProtectedRouteAdmin";
 import ProtectedRouteDoctors from "./router/ProtectedRouteDoctors";
 import NotFoundPage from "./router/NotFoundPage";
 
-import ImageUpload from "../src/pages/ImageUpload";
-
 function App() {
   const { token, removeToken, setToken } = useToken();
   const [role, setRole] = useState("");
@@ -80,7 +78,6 @@ function App() {
                     path="/manageprofileadmin/:id/edit"
                     element={<ManageProfileAdmin />}
                   />
-                  <Route path="/upload-image" element={<ImageUpload />} />
                 </Route>
               </Route>
               <Route element={<ProtectedRouteDoctors />}>

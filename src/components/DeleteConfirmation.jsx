@@ -9,7 +9,7 @@ const DeleteConfirmation = ({ show, handleClose, handleConfirm }) => {
       </Modal.Header>
       <Modal.Body>Are you sure you want to delete this account?</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="primary" onClick={handleClose}>
           Cancel
         </Button>
         <Button className="btn btn-error" onClick={handleConfirm}>
