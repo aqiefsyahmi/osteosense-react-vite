@@ -36,25 +36,52 @@ const AdminReportAnalysisDetails = () => {
     ? formatDateTime(patientData.datetimeprediction)
     : null;
 
+  const getResultStyle = (result) => {
+    if (result === "Normal") {
+      return { color: "green", fontWeight: "bold" };
+    } else if (result === "Osteoporosis") {
+      return { color: "red", fontWeight: "bold" };
+    } else {
+      return {};
+    }
+  };
+
   return (
     <>
-      <div className="font-bold">Detail History Analysis</div>
-      <div className="font-semibold">Patient Name</div>
-      <div>{patientData?.fullname}</div>
-      <div className="font-semibold">Age</div>
-      <div>{patientData?.age}</div>
-      <div className="font-semibold">Gender</div>
-      <div>{patientData?.gender}</div>
-      <div className="font-semibold">Date Prediction</div>
-      <div>{formattedDateTime?.date}</div>
-      <div className="font-semibold">Time Prediction</div>
-      <div>{formattedDateTime?.time}</div>
-      <div className="font-semibold">Result Analysis:</div>
-      <div>{patientData?.resultprediction}</div>
-      <div className="font-semibold">Email:</div>
-      <div>{patientData?.email}</div>
-      <div className="font-semibold">Phone No.:</div>
-      <div>{patientData?.phoneno}</div>
+      <div className="grid grid-cols-2 ">
+        <div>
+          <div className="font-bold">Detail History Analysis</div>
+          <div className="font-semibold">Patient Name</div>
+          <div>{patientData?.fullname}</div>
+          <div className="font-semibold">Age</div>
+          <div>{patientData?.age}</div>
+          <div className="font-semibold">Gender</div>
+          <div>{patientData?.gender}</div>
+          <div className="font-semibold">Email:</div>
+          <div>{patientData?.email}</div>
+          <div className="font-semibold">Phone No.:</div>
+          <div>{patientData?.phoneno}</div>
+          <div className="font-semibold">Date Prediction</div>
+          <div>{formattedDateTime?.date}</div>
+          <div className="font-semibold">Time Prediction</div>
+          <div>{formattedDateTime?.time}</div>
+          <div className="font-semibold">Result Analysis:</div>
+          <div style={getResultStyle(patientData?.resultprediction)}>
+            {patientData?.resultprediction}
+          </div>
+        </div>
+        <div>
+          <div className="font-semibold">Prediction Image:</div>
+          {patientData?.imageprediction && (
+            <img
+              src={`http://127.0.0.1:5000/static/uploads/${patientData.imageprediction}`}
+              alt="Prediction"
+              className="img-fluid img-bordered"
+              width="200px"
+            />
+          )}
+        </div>
+      </div>
     </>
   );
 };

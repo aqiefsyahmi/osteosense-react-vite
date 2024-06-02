@@ -270,7 +270,7 @@ export default function DoctorsHeader(props) {
               {profileData && (
                 <ul className="mt-3 z-[1] p-2 shadow-md menu menu-sm dropdown-content bg-base-100 rounded-box w-52 border divide-y">
                   <div className="px-2 py-1">
-                    <span className="block text-sm">
+                    <span className="block text-sm font-semibold">
                       {profileData.profile_fullname}
                     </span>
                     <span className="block text-sm text-gray-500 truncate dark:text-gray-400 pb-2">

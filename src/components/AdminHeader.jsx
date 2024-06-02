@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
 import adminicon from "../image/adminicon.png";
+import myOsteosensesLogo from "../image/myOsteosensesLogo.png";
 
 export default function AdminHeader(props) {
   const navigate = useNavigate();
@@ -75,7 +76,12 @@ export default function AdminHeader(props) {
       {isSidebarOpen && (
         <div className="w-64 bg-[#4A00FF] text-white border-r-2 divide-y border-[#00000036] shadow-xl">
           <div className="p-4">
-            <h1 className="text-2xl font-semibold">OsteoSense</h1>
+            <div className="flex items-center">
+              <div className="w-11 rounded-full">
+                <img src={myOsteosensesLogo} alt="OsteoSense Logo" />
+              </div>
+              <h1 className="text-2xl font-semibold ml-3">OsteoSense</h1>
+            </div>
             <ul className="menu">
               <li className="mb-2">
                 <button
@@ -219,6 +225,9 @@ export default function AdminHeader(props) {
                 className="btn btn-ghost text-white text-lg"
                 onClick={() => navigateToPage("admin")}
               >
+                <div className="w-8 rounded-full">
+                  <img src={myOsteosensesLogo} alt="OsteoSense Logo" />
+                </div>
                 OsteoSense
               </button>
             </div>
@@ -235,7 +244,7 @@ export default function AdminHeader(props) {
               <ul className="mt-3 z-[1] p-2 shadow-md menu menu-sm dropdown-content bg-base-100 rounded-box w-52 border divide-y">
                 {profileData && (
                   <div className="px-2 py-1">
-                    <span className="block text-sm">
+                    <span className="block text-sm font-semibold">
                       {profileData.profile_username}
                     </span>
                     <span className="block text-sm text-gray-500 truncate dark:text-gray-400 pb-2">

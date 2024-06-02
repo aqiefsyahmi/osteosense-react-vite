@@ -161,6 +161,7 @@ export default function ImagePrediction() {
       gender: "",
       email: "",
       phoneno: "",
+      doctorid: inputs.doctorid,
       datetimeprediction: "", // Reset datetimeprediction to current Malaysia time
       resultprediction: "",
       imageprediction: "",
@@ -296,7 +297,7 @@ export default function ImagePrediction() {
             </button>
             <button
               type="button"
-              className="btn btn-secondary ms-2"
+              className="btn btn-error text-white ms-2"
               onClick={handleReset}
             >
               Reset

@@ -52,6 +52,7 @@ const AdminEditDoctors = () => {
       <table className="table table-striped table-border table-hover">
         <thead>
           <tr>
+            <th>No.</th>
             <th>Username</th>
             <th>Email</th>
             <th>Full Name</th>
@@ -64,6 +65,7 @@ const AdminEditDoctors = () => {
           {/* Map over transactions and display them in the table */}
           {doctor.map((doctor, key) => (
             <tr key={key}>
+              <td>{key + 1}.</td>
               <td>{doctor.username}</td>
               <td>{doctor.email}</td>
               <td>{doctor.fullname}</td>

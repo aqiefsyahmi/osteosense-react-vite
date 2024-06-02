@@ -36,6 +36,16 @@ const DoctorsReportAnalysisDetails = () => {
     ? formatDateTime(patientData.datetimeprediction)
     : null;
 
+  const getResultStyle = (result) => {
+    if (result === "Normal") {
+      return { color: "green", fontWeight: "bold" };
+    } else if (result === "Osteoporosis") {
+      return { color: "red", fontWeight: "bold" };
+    } else {
+      return {};
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 ">
@@ -56,7 +66,9 @@ const DoctorsReportAnalysisDetails = () => {
           <div className="font-semibold">Time Prediction</div>
           <div>{formattedDateTime?.time}</div>
           <div className="font-semibold">Result Analysis:</div>
-          <div>{patientData?.resultprediction}</div>
+          <div style={getResultStyle(patientData?.resultprediction)}>
+            {patientData?.resultprediction}
+          </div>
         </div>
         <div>
           <div className="font-semibold">Prediction Image:</div>
