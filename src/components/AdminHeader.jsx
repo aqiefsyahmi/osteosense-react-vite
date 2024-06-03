@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
 import adminicon from "../image/adminicon.png";
-import myOsteosensesLogo from "../image/myOsteosensesLogo.png";
+import myOsteosensesLogoWhite from "../image/myOsteosensesLogoWhite.png";
 
 export default function AdminHeader(props) {
   const navigate = useNavigate();
@@ -77,8 +77,8 @@ export default function AdminHeader(props) {
         <div className="w-64 bg-[#4A00FF] text-white border-r-2 divide-y border-[#00000036] shadow-xl">
           <div className="p-4">
             <div className="flex items-center">
-              <div className="w-11 rounded-full">
-                <img src={myOsteosensesLogo} alt="OsteoSense Logo" />
+              <div className="w-10 rounded-full">
+                <img src={myOsteosensesLogoWhite} alt="OsteoSense Logo" />
               </div>
               <h1 className="text-2xl font-semibold ml-3">OsteoSense</h1>
             </div>
@@ -226,7 +226,7 @@ export default function AdminHeader(props) {
                 onClick={() => navigateToPage("admin")}
               >
                 <div className="w-8 rounded-full">
-                  <img src={myOsteosensesLogo} alt="OsteoSense Logo" />
+                  <img src={myOsteosensesLogoWhite} alt="OsteoSense Logo" />
                 </div>
                 OsteoSense
               </button>

@@ -45,7 +45,7 @@ export default function Login({ handleLogin }) {
 
   return (
     <div className="h-screen grid md:grid-cols-2 sm:grid-cols-1">
-      <div className="content-center bg-[#FFFFFF] mt-5 mb-5">
+      <div className="content-center mt-5 mb-5">
         <div className="grid place-content-center pb-[70px]">
           <span className="text-[#4A00FF] text-4xl font-bold">
             Welcome to{" "}

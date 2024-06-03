@@ -187,13 +187,13 @@ export default function Admin() {
 
   return (
     <>
-      <h4>Doctors</h4>
-      <h5>{doctorCount}</h5>
-      <h4>Prediction Tested</h4>
-      <h5>{predictCount}</h5>
+      <div>Doctors</div>
+      <div>{doctorCount}</div>
+      <div>Prediction Tested</div>
+      <div>{predictCount}</div>
       {profileData && (
         <div>
-          <h4>Welcome Back, {profileData.profile_username}</h4>
+          <div>Welcome Back, {profileData.profile_username}</div>
           <Link
             className="btn btn-sm btn-primary"
             to={`/manageprofileadmin/${profileData.profile_id}/edit`}
