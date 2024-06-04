@@ -23,6 +23,7 @@ import DoctorsHeader from "./components/DoctorsHeader";
 import ProtectedRouteAdmin from "./router/ProtectedRouteAdmin";
 import ProtectedRouteDoctors from "./router/ProtectedRouteDoctors";
 import NotFoundPage from "./router/NotFoundPage";
+import "./components/CustomStyle.css";
 
 function App() {
   const { token, removeToken, setToken } = useToken();

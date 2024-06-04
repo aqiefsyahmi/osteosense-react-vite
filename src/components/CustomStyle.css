@@ -1,0 +1,26 @@
+.form-control {
+  background-color: #ececec;
+  border: 0px solid #ced4da;
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 1rem;
+  color: #495057;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group-append {
+  margin-left: -1px; /* Adjust spacing between input and append */
+}
+
+.input-group-text {
+  background-color: #ececec;
+  border: 0px solid #ced4da;
+  border-radius: 9px;
+  padding: 10px 12px; /* Adjust padding for the @ symbol */
+  font-size: 1rem;
+  color: #495057;
+}
