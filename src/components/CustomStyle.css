@@ -24,3 +24,20 @@
   font-size: 1rem;
   color: #495057;
 }
+
+.select-control {
+  width: 100%; /* Adjust the width as needed */
+  background-color: #ececec;
+  border: 0px solid #ced4da;
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 1rem;
+  color: #333; /* Text color */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition for border color and box shadow */
+}
+
+.select-control:focus {
+  border-color: #c2dbfe; /* Border color on focus */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 0.25rem rgba(194, 219, 254); /* Box shadow on focus */
+}
