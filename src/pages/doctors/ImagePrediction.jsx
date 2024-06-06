@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment-timezone";
+import Select from "react-select";
 
 export default function ImagePrediction() {
   const [patients, setPatients] = useState([]);
@@ -18,9 +19,13 @@ export default function ImagePrediction() {
   });
   const [selectedPatient, setSelectedPatient] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
+
+  //dropdown search patient animation style
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     getDoctors();
@@ -32,8 +37,27 @@ export default function ImagePrediction() {
   };
 
   const handleFileUpload = async (event) => {
+    if (!selectedPatient) {
+      alert("Please select a patient first!");
+      return;
+    }
+
     const file = event.target.files[0];
+
+    const validFileTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!validFileTypes.includes(file.type)) {
+      alert("Only PNG, JPEG, and JPG files are accepted!");
+      return;
+    }
+
     setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreviewUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -96,7 +120,20 @@ export default function ImagePrediction() {
   };
 
   const handlePatientChange = (event) => {
-    const patientId = event.target.value;
+    if (!event) {
+      setSelectedPatient("");
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        fullname: "",
+        age: "",
+        gender: "",
+        email: "",
+        phoneno: "",
+      }));
+      return;
+    }
+
+    const patientId = event.value;
     setSelectedPatient(patientId);
     const patient = patients.find((p) => p.id === patientId);
     if (patient) {
@@ -114,13 +151,13 @@ export default function ImagePrediction() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!selectedFile) {
-      alert("Please upload a file!");
+    if (!inputs.fullname) {
+      alert("Please select a patient!");
       return;
     }
 
-    if (!inputs.fullname) {
-      alert("Please select a patient!");
+    if (!selectedFile) {
+      alert("Please upload an image!");
       return;
     }
 
@@ -146,6 +183,7 @@ export default function ImagePrediction() {
         });
         setSelectedFile(null); // Reset file input
         setSelectedPatient(""); // Reset selected patient
+        setImagePreviewUrl(""); // Clear image preview
         document.getElementById("file-upload").value = null; // Clear file input field
         navigate("/doctors");
       })
@@ -168,143 +206,260 @@ export default function ImagePrediction() {
     });
     setSelectedFile(null);
     setSelectedPatient("");
+    setImagePreviewUrl(""); // Clear image preview
     document.getElementById("file-upload").value = null; // Clear file input field
   };
 
+  //for custondropdown andimation
+  const customDropdownIndicator = ({ isDropdownOpen }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24px"
+      viewBox="0 -960 960 960"
+      width="24px"
+      fill="#666666"
+      className={`transition-transform ${
+        isDropdownOpen ? "transform rotate-180" : ""
+      }`}
+    >
+      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+    </svg>
+  );
+
   return (
     <>
-      <h1>Image Prediction</h1>
-      <div>Upload Photos</div>
-      <input
-        id="file-upload"
-        type="file"
-        className="form-control"
-        onChange={handleFileUpload}
-      />
-      <div>Search and Select Patient</div>
-      <div className="pt-1 pb-2">
-        <label className="input input-bordered flex items-center gap-2">
-          <select value={selectedPatient} onChange={handlePatientChange}>
-            <option value="">--Select a patient--</option>
-            {patients.map((patient) => (
-              <option key={patient.id} value={patient.id}>
-                {patient.fullname}
-              </option>
-            ))}
-          </select>
-        </label>
+      <div>
+        <div className="font-bold text-3xl">Image Prediction</div>
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-4 py-4 gap-4">
+            <div className="col-span-1 flex flex-col">
+              <div className="font-bold text-lg">Search and Select Patient</div>
+              <div className="py-3">
+                <Select
+                  value={selectedPatient}
+                  onChange={handlePatientChange}
+                  options={patients.map((patient) => ({
+                    value: patient.id,
+                    label: patient.fullname,
+                  }))}
+                  placeholder="Select or search patient name"
+                  styles={{
+                    control: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: "#ececec",
+                      border: "0px solid #ced4da",
+                      borderRadius: "9px",
+                      padding: "4px",
+                      paddingRight: "7px",
+                      fontSize: "1rem",
+                      color: "#333",
+                      width: "100%",
+                      transition:
+                        "border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
+                      borderColor: state.isFocused ? "#c2dbfe" : "#ced4da",
+                      outline: state.isFocused ? "none" : "inherit",
+                      boxShadow: state.isFocused
+                        ? "0 0 0 0.25rem rgba(194, 219, 254)"
+                        : "none",
+                    }),
+                  }}
+                  components={{
+                    DropdownIndicator: () =>
+                      customDropdownIndicator({ isDropdownOpen }),
+                  }}
+                  onMenuOpen={() => setIsDropdownOpen(true)}
+                  onMenuClose={() => setIsDropdownOpen(false)}
+                />
+              </div>
+              <div className="font-bold text-lg">Upload Image</div>
+              <div className="file-upload mt-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="80px"
+                  viewBox="0 -960 960 960"
+                  width="80px"
+                  fill="#4A00FF"
+                >
+                  <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h360v80H200v560h560v-360h80v360q0 33-23.5 56.5T760-120H200Zm480-480v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM240-280h480L570-480 450-320l-90-120-120 160Zm-40-480v560-560Z" />
+                </svg>
+                <div className="font-bold text-md">
+                  <span className="text-[#727272]">
+                    {" "}
+                    Drop your image here, or{" "}
+                  </span>
+                  <span className="text-[#4A00FF]">browse</span>
+                </div>
+                <div className="font-bold text-xs text-[#B5B5B5]">
+                  Support JPG, JPEG and PNG only
+                </div>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="form-control"
+                  accept="image/png, image/jpeg, image/jpg"
+                  onChange={handleFileUpload}
+                />
+              </div>
+            </div>
+            <div className="col-span-3">
+              <div className="bg-[#FFFFFF] w-full border-2 px-4 py-4 drop-shadow-lg rounded-[1.0rem]">
+                <div className="font-bold text-gray-500 text-xl">
+                  View Updated Information
+                </div>
+                {selectedPatient ? (
+                  <div className="grid grid-cols-3 py-4 gap-4 mb-4">
+                    <div className="col-span-1">
+                      {/* Image preview placeholder */}
+                      <div className="font-bold text-lg">Uploaded Image:</div>
+                      <div className="bg-gray-200 w-full h-full flex items-center justify-center mt-2">
+                        {imagePreviewUrl ? (
+                          <img
+                            src={imagePreviewUrl}
+                            alt="Uploaded"
+                            className="max-h-full max-w-full"
+                          />
+                        ) : (
+                          <div>No uploaded image</div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-span-2">
+                      <div className="grid gap-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="font-bold text-lg">
+                              Fullname:
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control mt-2"
+                              name="fullname"
+                              value={inputs.fullname}
+                              onChange={(e) =>
+                                setInputs({
+                                  ...inputs,
+                                  fullname: e.target.value,
+                                })
+                              }
+                              disabled
+                            />
+                          </div>
+                          <div>
+                            <label className="font-bold text-lg">Email:</label>
+                            <input
+                              type="email"
+                              className="form-control mt-2"
+                              name="email"
+                              value={inputs.email}
+                              onChange={(e) =>
+                                setInputs({ ...inputs, email: e.target.value })
+                              }
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="font-bold text-lg">
+                              Phone No:
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control mt-2"
+                              name="phoneno"
+                              value={inputs.phoneno}
+                              onChange={(e) =>
+                                setInputs({
+                                  ...inputs,
+                                  phoneno: e.target.value,
+                                })
+                              }
+                              disabled
+                            />
+                          </div>
+                          <div>
+                            <label className="font-bold text-lg">Gender:</label>
+                            <input
+                              type="text"
+                              className="form-control mt-2"
+                              name="gender"
+                              value={inputs.gender}
+                              onChange={(e) =>
+                                setInputs({ ...inputs, gender: e.target.value })
+                              }
+                              disabled
+                            />
+                          </div>
+                          <div>
+                            <label className="font-bold text-lg">Age:</label>
+                            <input
+                              type="number"
+                              className="form-control mt-2"
+                              name="age"
+                              value={inputs.age}
+                              onChange={(e) =>
+                                setInputs({ ...inputs, age: e.target.value })
+                              }
+                              disabled
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="font-bold text-lg">
+                              Datetime Prediction:
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control mt-2"
+                              name="datetimeprediction"
+                              value={inputs.datetimeprediction}
+                              placeholder="-"
+                              disabled
+                            />
+                          </div>
+                          <div>
+                            <label className="font-bold text-lg">
+                              Result Prediction:
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control mt-2"
+                              name="resultprediction"
+                              value={inputs.resultprediction}
+                              placeholder="-"
+                              disabled
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="font-bold text-lg text-gray-400 flex items-center justify-center h-[360px]">
+                    No patient selected. Please select a patient to view their
+                    information.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-center gap-4 mt-4">
+              <button type="submit" className="w-40 btn btn-sm btn-primary">
+                Submit
+              </button>
+              <button
+                type="button"
+                className="w-40 btn btn-sm btn-outline btn-error"
+                onClick={handleReset}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">Fullname:</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              name="fullname"
-              value={inputs.fullname}
-              onChange={(e) =>
-                setInputs({ ...inputs, fullname: e.target.value })
-              }
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">Age:</label>
-          <div className="col-sm-10">
-            <input
-              type="number"
-              className="form-control"
-              name="age"
-              value={inputs.age}
-              onChange={(e) => setInputs({ ...inputs, age: e.target.value })}
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">Gender:</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              name="gender"
-              value={inputs.gender}
-              onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">Email:</label>
-          <div className="col-sm-10">
-            <input
-              type="email"
-              className="form-control"
-              name="email"
-              value={inputs.email}
-              onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">Phone No:</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              name="phoneno"
-              value={inputs.phoneno}
-              onChange={(e) =>
-                setInputs({ ...inputs, phoneno: e.target.value })
-              }
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">
-            Datetime Prediction:
-          </label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              name="datetimeprediction"
-              value={inputs.datetimeprediction}
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <label className="col-sm-2 col-form-label">Result Prediction:</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control"
-              name="resultprediction"
-              value={inputs.resultprediction}
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="row mb-2">
-          <div className="col-sm-10 offset-sm-2">
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-            <button
-              type="button"
-              className="btn btn-error text-white ms-2"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
-          </div>
-        </div>
-      </form>
     </>
   );
 }

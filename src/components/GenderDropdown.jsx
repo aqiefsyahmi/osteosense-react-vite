@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const GenderDropdown = ({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +28,7 @@ const GenderDropdown = ({ value, onChange }) => {
   };
 
   return (
-    <div className="mt-3 relative inline-block w-full" ref={dropdownRef}>
+    <div className="mt-2 relative inline-block w-full" ref={dropdownRef}>
       <button
         type="button"
         className="text-left flex justify-between items-center"

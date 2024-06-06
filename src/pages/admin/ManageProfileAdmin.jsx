@@ -75,11 +75,11 @@ export default function ManageProfileAdmin() {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4 py-4">
             <div>
-              <div className="font-bold text-xl">Username</div>
+              <div className="font-bold text-lg">Username</div>
               <input
                 type="text"
                 value={inputs.username}
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="username"
                 onChange={handleChange}
                 placeholder="Enter Username"
@@ -87,11 +87,11 @@ export default function ManageProfileAdmin() {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Email</div>
+              <div className="font-bold text-lg">Email</div>
               <input
                 type="email"
                 value={inputs.email}
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="email"
                 onChange={handleChange}
                 placeholder="Enter Email"
@@ -99,18 +99,18 @@ export default function ManageProfileAdmin() {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Password</div>
+              <div className="font-bold text-lg">Password</div>
               <div className="input-group mb-3">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   name="password"
                   onChange={handleChange}
                   value={inputs.password}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"
@@ -143,18 +143,18 @@ export default function ManageProfileAdmin() {
               </div>
             </div>
             <div>
-              <div className="font-bold text-xl">Confirm Password</div>
+              <div className="font-bold text-lg">Confirm Password</div>
               <div className="input-group mb-3">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="password_confirm"
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   onChange={handleChange}
                   value={inputs.password_confirm}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"

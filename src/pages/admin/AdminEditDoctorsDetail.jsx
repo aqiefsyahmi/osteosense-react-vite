@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -74,11 +74,11 @@ const AdminEditDoctorsDetail = () => {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-3 gap-4 py-4">
             <div>
-              <div className="font-bold text-xl">Full Name</div>
+              <div className="font-bold text-lg">Full Name</div>
               <input
                 type="text"
                 value={inputs.fullname}
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="fullname"
                 onChange={handleChange}
                 placeholder="Enter Full Name"
@@ -86,11 +86,11 @@ const AdminEditDoctorsDetail = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Username</div>
+              <div className="font-bold text-lg">Username</div>
               <input
                 type="text"
                 value={inputs.username}
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="username"
                 onChange={handleChange}
                 placeholder="Enter Username"
@@ -98,11 +98,11 @@ const AdminEditDoctorsDetail = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Email</div>
+              <div className="font-bold text-lg">Email</div>
               <input
                 type="email"
                 value={inputs.email}
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="email"
                 onChange={handleChange}
                 placeholder="Enter Email"
@@ -110,11 +110,11 @@ const AdminEditDoctorsDetail = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Phone No.</div>
+              <div className="font-bold text-lg">Phone No.</div>
               <input
                 type="text"
                 value={inputs.phoneno}
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="phoneno"
                 onChange={handleChange}
                 placeholder="Enter Phone No."
@@ -122,18 +122,18 @@ const AdminEditDoctorsDetail = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Password</div>
+              <div className="font-bold text-lg">Password</div>
               <div className="input-group mb-3">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   name="password"
                   onChange={handleChange}
                   value={inputs.password}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"
@@ -166,18 +166,18 @@ const AdminEditDoctorsDetail = () => {
               </div>
             </div>
             <div>
-              <div className="font-bold text-xl">Confirm Password</div>
+              <div className="font-bold text-lg">Confirm Password</div>
               <div className="input-group mb-3">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="password_confirm"
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   onChange={handleChange}
                   value={inputs.password_confirm}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"

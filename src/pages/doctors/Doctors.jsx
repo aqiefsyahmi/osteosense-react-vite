@@ -73,9 +73,10 @@ export default function Doctors() {
 
   return (
     <>
+      <div className="font-bold text-3xl">Overview</div>
       {profileData && (
         <div className="row g-0">
-          <div>
+          <div className="font-semibold text-xl">
             Welcome Back,{" "}
             <span className="font-bold">{profileData.profile_fullname}</span>
           </div>
@@ -85,57 +86,61 @@ export default function Doctors() {
           >
             Edit Profile
           </Link>
-          <h4>Upload Bone Image</h4>
+          <div className="font-semibold text-xl">Upload Bone Image</div>
           <button className="btn btn-sm btn-primary" onClick={registerPatient}>
             Click Here Upload Image
           </button>
         </div>
       )}
-      {analysisData && (
-        <>
-          <h1>History Report Analysis</h1>
-          <table className="table table-striped table-border table-hover">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Patient Name</th>
-                <th>Gender</th>
-                <th>Age</th>
-                <th>Prediction</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {analysisData.map((predict, key) => (
-                <tr key={key}>
-                  <td>{key + 1}</td>
-                  <td>{predict.fullname}</td>
-                  <td>{predict.gender}</td>
-                  <td>{predict.age}</td>
-                  <td
-                    className={`font-semibold text-${
-                      predict.resultprediction === "Normal"
-                        ? "success"
-                        : "danger"
-                    }`}
-                  >
-                    {predict.resultprediction}
-                  </td>
-                  <td>
-                    {moment(predict.datetimeprediction).format("DD MMM YYYY")}
-                  </td>
+      <div className="font-bold text-gray-500 text-2xl">
+        History Report Analysis
+      </div>
+      <div className="bg-[#FFFFFF] w-full border-2 px-4 py-4 drop-shadow-lg rounded-[1.0rem]">
+        {analysisData && (
+          <>
+            <table className="table table-striped table-border table-hover">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Patient Name</th>
+                  <th>Gender</th>
+                  <th>Age</th>
+                  <th>Prediction</th>
+                  <th>Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
-      )}
-      <button
-        className="btn btn-sm btn-primary"
-        onClick={doctorsReportAnalysis}
-      >
-        See History Report Analysis
-      </button>
+              </thead>
+              <tbody>
+                {analysisData.map((predict, key) => (
+                  <tr key={key}>
+                    <td>{key + 1}</td>
+                    <td>{predict.fullname}</td>
+                    <td>{predict.gender}</td>
+                    <td>{predict.age}</td>
+                    <td
+                      className={`font-semibold text-${
+                        predict.resultprediction === "Normal"
+                          ? "success"
+                          : "danger"
+                      }`}
+                    >
+                      {predict.resultprediction}
+                    </td>
+                    <td>
+                      {moment(predict.datetimeprediction).format("DD MMM YYYY")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+        <button
+          className="btn btn-sm btn-primary"
+          onClick={doctorsReportAnalysis}
+        >
+          See History Report Analysis
+        </button>
+      </div>
     </>
   );
 }

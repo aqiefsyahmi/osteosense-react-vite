@@ -1,139 +1,3 @@
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import { useNavigate, useParams } from "react-router-dom";
-
-// const ManageProfileDoctors = () => {
-//   const navigate = useNavigate();
-//   const { id } = useParams();
-
-//   const [inputs, setInputs] = useState([]);
-
-//   const [initialInputs, setInitialInputs] = useState([]);
-
-//   useEffect(() => {
-//     getDoctor();
-//   }, []);
-
-//   const getDoctor = async () => {
-//     try {
-//       const response = await axios.get(
-//         `http://127.0.0.1:5000/doctordetails/${id}`
-//       );
-//       const initialData = {
-//         ...response.data,
-//         password: "",
-//         password_confirm: "",
-//       };
-//       setInputs(initialData);
-//       setInitialInputs(initialData);
-//     } catch (error) {
-//       console.error("There was an error fetching the doctor details!", error);
-//     }
-//   };
-
-//   const handleChange = (event) => {
-//     const { name, value } = event.target;
-//     setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
-//   };
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     if (inputs.password !== inputs.password_confirm) {
-//       alert("Passwords do not match");
-//       return;
-//     }
-
-//     // eslint-disable-next-line no-unused-vars
-//     const { password_confirm, ...updateData } = inputs;
-
-//     try {
-//       await axios.put(`http://127.0.0.1:5000/doctorupdate/${id}`, updateData);
-//       alert("Doctor Profle Successfully Updated!");
-//       navigate("/doctors");
-//     } catch (error) {
-//       console.error("There was an error updating the doctor details!", error);
-//     }
-//   };
-
-//   const handleReset = () => {
-//     setInputs(initialInputs);
-//   };
-//   return (
-//     <>
-//       {/* <Header />
-//       <Navigation /> */}
-//       <h1>My Profile</h1>
-//       <form onSubmit={handleSubmit}>
-//         <div>Full Name</div>
-//         <input
-//           type="text"
-//           value={inputs.fullname}
-//           className="form-control"
-//           name="fullname"
-//           onChange={handleChange}
-//           required
-//         />
-//         <div>Username</div>
-//         <input
-//           type="text"
-//           value={inputs.username}
-//           className="form-control"
-//           name="username"
-//           onChange={handleChange}
-//           required
-//         />
-//         <div>Email</div>
-//         <input
-//           type="email"
-//           value={inputs.email}
-//           className="form-control"
-//           name="email"
-//           onChange={handleChange}
-//           required
-//         />
-//         <div>Password</div>
-//         <input
-//           type="password"
-//           className="form-control"
-//           name="password"
-//           onChange={handleChange}
-//           value={inputs.password}
-//           required
-//         />
-//         <div>Confirm Password</div>
-//         <input
-//           type="password"
-//           name="password_confirm"
-//           className="form-control"
-//           onChange={handleChange}
-//           value={inputs.password_confirm}
-//           required
-//         />
-//         <div>Phone No.</div>
-//         <input
-//           type="text"
-//           value={inputs.phoneno}
-//           className="form-control"
-//           name="phoneno"
-//           onChange={handleChange}
-//           required
-//         />
-//         <button className="btn btn-sm btn-primary" type="submit">
-//           Save
-//         </button>
-//         <button
-//           className="btn btn-sm btn-danger"
-//           type="button"
-//           onClick={handleReset}
-//         >
-//           Reset
-//         </button>
-//       </form>
-//     </>
-//   );
-// };
-
-// export default ManageProfileDoctors;
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -212,10 +76,10 @@ export default function ManageProfileDoctors() {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-3 gap-4 py-4">
             <div>
-              <div className="font-bold text-xl">Full Name</div>
+              <div className="font-bold text-lg">Full Name</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="fullname"
                 value={inputs.fullname}
                 onChange={handleChange}
@@ -224,10 +88,10 @@ export default function ManageProfileDoctors() {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Username</div>
+              <div className="font-bold text-lg">Username</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="username"
                 value={inputs.username}
                 onChange={handleChange}
@@ -236,10 +100,10 @@ export default function ManageProfileDoctors() {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Email</div>
+              <div className="font-bold text-lg">Email</div>
               <input
                 type="email"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="email"
                 value={inputs.email}
                 onChange={handleChange}
@@ -248,10 +112,10 @@ export default function ManageProfileDoctors() {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Phone No.</div>
+              <div className="font-bold text-lg">Phone No.</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="phoneno"
                 value={inputs.phoneno}
                 onChange={handleChange}
@@ -260,18 +124,18 @@ export default function ManageProfileDoctors() {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Password</div>
+              <div className="font-bold text-lg">Password</div>
               <div className="input-group mb-3">
                 <input
                   type={showPassword ? "text" : "password"}
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   name="password"
                   value={inputs.password}
                   onChange={handleChange}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"
@@ -304,18 +168,18 @@ export default function ManageProfileDoctors() {
               </div>
             </div>
             <div>
-              <div className="font-bold text-xl">Confirm Password</div>
+              <div className="font-bold text-lg">Confirm Password</div>
               <div className="input-group mb-3">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   name="password_confirm"
                   value={inputs.password_confirm}
                   onChange={handleChange}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"

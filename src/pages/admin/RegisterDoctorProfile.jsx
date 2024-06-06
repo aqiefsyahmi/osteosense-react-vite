@@ -76,10 +76,10 @@ const RegisterDoctorProfile = () => {
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-3 gap-4 py-4">
             <div>
-              <div className="font-bold text-xl">Full Name</div>
+              <div className="font-bold text-lg">Full Name</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="fullname"
                 value={inputs.fullname}
                 onChange={handleInputChange}
@@ -88,10 +88,10 @@ const RegisterDoctorProfile = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Username</div>
+              <div className="font-bold text-lg">Username</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="username"
                 value={inputs.username}
                 onChange={handleInputChange}
@@ -100,10 +100,10 @@ const RegisterDoctorProfile = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Email</div>
+              <div className="font-bold text-lg">Email</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="email"
                 value={inputs.email}
                 onChange={handleInputChange}
@@ -112,10 +112,10 @@ const RegisterDoctorProfile = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Phone No.</div>
+              <div className="font-bold text-lg">Phone No.</div>
               <input
                 type="text"
-                className="form-control mt-3"
+                className="form-control mt-2"
                 name="phoneno"
                 value={inputs.phoneno}
                 onChange={handleInputChange}
@@ -124,18 +124,18 @@ const RegisterDoctorProfile = () => {
               />
             </div>
             <div>
-              <div className="font-bold text-xl">Password</div>
+              <div className="font-bold text-lg">Password</div>
               <div className="input-group mb-3">
                 <input
                   type={inputs.showPassword ? "text" : "password"}
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   name="password"
                   value={inputs.password}
                   onChange={handleInputChange}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"
@@ -168,18 +168,18 @@ const RegisterDoctorProfile = () => {
               </div>
             </div>
             <div>
-              <div className="font-bold text-xl">Confirm Password</div>
+              <div className="font-bold text-lg">Confirm Password</div>
               <div className="input-group mb-3">
                 <input
                   type={inputs.showConfirmPassword ? "text" : "password"}
-                  className="form-control mt-3"
+                  className="form-control mt-2"
                   name="confirmPassword"
                   value={inputs.confirmPassword}
                   onChange={handleInputChange}
                   placeholder="**********"
                   required
                 />
-                <div className="input-group-append mt-3">
+                <div className="input-group-append mt-2">
                   <span className="input-group-text rounded-none rounded-r-lg">
                     <div
                       className="password-toggle"
