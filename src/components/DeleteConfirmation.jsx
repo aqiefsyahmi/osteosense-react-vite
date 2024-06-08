@@ -12,9 +12,9 @@ const DeleteConfirmation = ({ show, handleClose, handleConfirm }) => {
         <Button variant="primary" onClick={handleClose}>
           Cancel
         </Button>
-        <Button className="btn btn-error" onClick={handleConfirm}>
+        <button className="btn btn-error text-white" onClick={handleConfirm}>
           Yes, Delete
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   );

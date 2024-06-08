@@ -76,7 +76,7 @@ const PatientList = () => {
               <td>
                 <button
                   onClick={() => handleDeleteClick(patient.id)}
-                  className="btn btn-sm btn-danger ms-2"
+                  className="btn btn-sm btn-error text-white ms-2"
                 >
                   Delete
                 </button>

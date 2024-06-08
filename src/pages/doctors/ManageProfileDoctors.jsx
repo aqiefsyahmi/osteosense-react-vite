@@ -218,7 +218,7 @@ export default function ManageProfileDoctors() {
             </button>
             <button
               type="reset"
-              className="w-40 btn btn-sm btn-outline btn-error"
+              className="w-40 btn btn-sm btn-outline btn-error btn-hover-white"
               onClick={handleReset}
             >
               Reset

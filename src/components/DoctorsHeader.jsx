@@ -297,7 +297,7 @@ export default function DoctorsHeader(props) {
                     <li>
                       <button
                         type="submit"
-                        className="btn btn-outline btn-sm btn-error"
+                        className="btn btn-outline btn-sm btn-error btn-hover-white"
                         onClick={logMeOut}
                       >
                         Logout

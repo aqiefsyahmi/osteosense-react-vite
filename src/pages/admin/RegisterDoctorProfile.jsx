@@ -218,7 +218,7 @@ const RegisterDoctorProfile = () => {
             </button>
             <button
               type="button"
-              className="w-40 btn btn-sm btn-outline btn-error"
+              className="w-40 btn btn-sm btn-outline btn-error btn-hover-white"
               onClick={handleReset}
             >
               Reset

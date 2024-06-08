@@ -84,7 +84,9 @@ const AdminReportAnalysis = () => {
                   </button>
                 </td>
                 <td>
-                  <button className="btn btn-sm btn-danger">Delete</button>
+                  <button className="btn btn-sm btn-error text-white">
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

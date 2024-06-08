@@ -80,7 +80,7 @@ export default function AdminHeader(props) {
               <div className="w-10 rounded-full">
                 <img src={myOsteosensesLogoWhite} alt="OsteoSense Logo" />
               </div>
-              <h1 className="text-2xl font-semibold ml-3">OsteoSense</h1>
+              <div className="text-2xl font-semibold ml-3">OsteoSense</div>
             </div>
             <ul className="menu">
               <li className="mb-2">
@@ -195,10 +195,7 @@ export default function AdminHeader(props) {
       <div className="flex flex-col flex-1 min-h-screen">
         <div className="navbar bg-[#4A00FF]">
           <div className="flex-none">
-            <button
-              className="btn btn-square btn-ghost"
-              onClick={toggleSidebar}
-            >
+            <div className="btn btn-square btn-ghost" onClick={toggleSidebar}>
               <div className="dropdown">
                 <div tabIndex={0} role="button" className="btn btn-ghost">
                   <svg
@@ -217,7 +214,7 @@ export default function AdminHeader(props) {
                   </svg>
                 </div>
               </div>
-            </button>
+            </div>
           </div>
           {!isSidebarOpen && (
             <div className="flex-1">
@@ -272,7 +269,7 @@ export default function AdminHeader(props) {
                   <li className="py-1">
                     <button
                       type="submit"
-                      className="btn btn-outline btn-sm btn-error"
+                      className="btn btn-outline btn-sm btn-error btn-hover-white"
                       onClick={logMeOut}
                     >
                       Logout

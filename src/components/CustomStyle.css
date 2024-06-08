@@ -83,3 +83,8 @@
   opacity: 0;
   cursor: pointer;
 }
+
+/* button reset hover white */
+.btn-hover-white:hover {
+  color: white !important;
+}

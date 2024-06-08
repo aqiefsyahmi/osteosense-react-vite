@@ -43,15 +43,21 @@ const RegisterPatients = () => {
       return;
     }
 
+    console.log("Submitting data:", inputs);
+
     axios
       .post("http://127.0.0.1:5000/signuppatient", inputs)
-      .then(function (response) {
-        console.log(response.data);
+      .then((response) => {
+        console.log("Response data:", response.data);
         alert("Patient Successfully Registered");
         navigate("/doctors");
       })
-      .catch(function (error) {
-        console.error("There was an error creating the patient!", error);
+      .catch((error) => {
+        console.error(
+          "There was an error creating the patient!",
+          error.response
+        );
+        alert("Failed to register patient.");
       });
   };
 
@@ -131,7 +137,7 @@ const RegisterPatients = () => {
             </button>
             <button
               type="button"
-              className="w-40 btn btn-sm btn-outline btn-error"
+              className="w-40 btn btn-sm btn-outline btn-error btn-hover-white"
               onClick={handleReset}
             >
               Reset

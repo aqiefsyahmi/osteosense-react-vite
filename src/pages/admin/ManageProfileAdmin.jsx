@@ -190,7 +190,7 @@ export default function ManageProfileAdmin() {
           <div className="flex justify-center gap-4">
             <button className="w-40 btn btn-sm btn-primary">Save</button>
             <button
-              className="w-40 btn btn-sm btn-outline btn-error"
+              className="w-40 btn btn-sm btn-outline btn-error btn-hover-white"
               type="button"
               onClick={handleReset}
             >
