@@ -16,6 +16,10 @@
   margin-left: -1px; /* Adjust spacing between input and append */
 }
 
+.input-group-append-login {
+  margin-left: -1px; /* Adjust spacing between input and append */
+}
+
 .input-group-text {
   background-color: #ececec;
   border: 0px solid #ced4da;
@@ -87,4 +91,16 @@
 /* button reset hover white */
 .btn-hover-white:hover {
   color: white !important;
+}
+.slideInLeft {
+  transform: translateX(0);
+}
+
+.slideOutLeft {
+  transform: translateX(-100%);
+}
+.active {
+  background-color: #ffffff;
+  border-radius: 9px;
+  color: #4a00ff;
 }

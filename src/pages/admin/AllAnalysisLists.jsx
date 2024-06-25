@@ -1,35 +1,77 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import DeleteConfirmation from "../../components/DeleteConfirmation";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import PredictDeleteConfirmation from "../../components/PredictDeleteConfirmation";
+import moment from "moment-timezone";
 import ItemsPerPageDropdown from "../../components/ItemsPerPageDropdown";
 
-const PatientList = () => {
+const AllAnalysisLists = () => {
   const navigate = useNavigate();
-  const [patient, setPatient] = useState([]);
+  const [allanalysislists, setAllAnalysisLists] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [patientIdToDelete, setPatientIdToDelete] = useState(null);
+  const [predictToDelete, setPredictToDelete] = useState(null);
+  const idtoken = localStorage.getItem("id");
 
-  //for show list table
+  // Pagination and sorting states
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const [activePage, setActivePage] = useState(1);
-  const indexOfLastItem = activePage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    getAllAnalysisLists();
+  }, []);
+
+  useEffect(() => {
+    setActivePage(1); // Reset to first page when search query changes
+  }, [searchQuery]);
+
+  function getAllAnalysisLists() {
+    axios.get("http://127.0.0.1:5000/listpredict").then(function (response) {
+      console.log(response.data);
+      setAllAnalysisLists(response.data);
+    });
+  }
+
+  const handlePredictionDetailsClick = (id) => {
+    navigate(`/predictlistdetails/${id}/view`);
+  };
+
+  const handleDeleteClick = (id) => {
+    setPredictToDelete(id);
+    setShowModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      await axios.delete(
+        `http://127.0.0.1:5000/predictdelete/${predictToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${idtoken}`,
+          },
+        }
+      );
+      getAllAnalysisLists();
+      alert("Successfully Deleted");
+    } catch (error) {
+      console.error("There was an error deleting the prediction!", error);
+    }
+    setShowModal(false);
+  };
 
   const handlePageClick = (page) => {
     setActivePage(page);
   };
+
   const handleItemsPerPageChange = (value) => {
     setItemsPerPage(value);
     setActivePage(1); // Reset to first page when changing items per page
   };
 
-  //handle sort ascending descending
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: "ascending",
-  });
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -37,14 +79,23 @@ const PatientList = () => {
     }
     setSortConfig({ key, direction });
   };
-  const sortedItems = [...patient]
+
+  const indexOfLastItem = activePage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // Assuming allanalysislists is your full array of items
+  const sortedItems = [...allanalysislists]
     .filter(
       (item) =>
         item.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.age.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.gender.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.phoneno.toLowerCase().includes(searchQuery.toLowerCase())
+        item.age.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.resultprediction
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        moment(item.datetimeprediction)
+          .format("DD MMM YYYY")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -58,86 +109,37 @@ const PatientList = () => {
     .slice(indexOfFirstItem, indexOfLastItem);
 
   const totalPages = Math.ceil(
-    patient.filter(
+    allanalysislists.filter(
       (item) =>
         item.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.age.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.gender.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.phoneno.toLowerCase().includes(searchQuery.toLowerCase())
+        item.age.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.resultprediction
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        moment(item.datetimeprediction)
+          .format("DD MMM YYYY")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
     ).length / itemsPerPage
   );
-  useEffect(() => {
-    setActivePage(1); // Reset to first page when search query changes
-  }, [searchQuery]);
-
-  useEffect(() => {
-    getPatient();
-  }, []);
-
-  const addPatient = () => {
-    navigate("/registerpatients");
-  };
-
-  function getPatient() {
-    axios.get("http://127.0.0.1:5000/listpatients").then(function (response) {
-      console.log(response.data);
-      setPatient(response.data);
-    });
-  }
-
-  const handleDeleteClick = (id) => {
-    setPatientIdToDelete(id);
-    setShowModal(true);
-  };
-
-  const handleConfirmDelete = () => {
-    axios
-      .delete(`http://127.0.0.1:5000/patientdelete/${patientIdToDelete}`)
-      .then((response) => {
-        console.log(response.data);
-        // Refresh the list of users after deletion
-        getPatient();
-      })
-      .catch((error) => {
-        console.error("There was an error deleting the doctor!", error);
-      });
-    setShowModal(false);
-    alert("Successfully Deleted");
-  };
 
   return (
     <>
       <div className="w-full h-full flex flex-col">
         <div className="flex justify-between pb-4">
           <div className="grid place-content-center justify-start font-bold text-3xl">
-            Edit Patient Profile
+            All History Analysis Lists
           </div>
           <div className="flex justify-end items-center gap-3">
-            <div>
-              <label className="font-semibold mr-2">Show List Patients:</label>
+            <div className="flex justify-center items-center">
+              <label className="font-semibold mr-2">Show List Analysis:</label>
               <ItemsPerPageDropdown
                 value={itemsPerPage}
-                options={["6", "15", "20", "25", patient.length]}
+                options={["6", "15", "20", "25", allanalysislists.length]}
                 onChange={handleItemsPerPageChange}
               />
             </div>
-            <button
-              className="w-40 btn btn-primary icon-button"
-              onClick={addPatient}
-            >
-              <svg
-                className="icon"
-                xmlns="http://www.w3.org/2000/svg"
-                height="20px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#D1DBFF"
-              >
-                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-              </svg>
-              Add Patient
-            </button>
           </div>
         </div>
         <div className="bg-[#FFFFFF] w-full border-2 px-4 py-4 drop-shadow-lg rounded-[1.0rem] ">
@@ -156,46 +158,8 @@ const PatientList = () => {
                 <th>No.</th>
                 <th onClick={() => handleSort("fullname")}>
                   <div className="flex items-center">
-                    Patient Full Name
+                    Patient Name
                     {sortConfig.key === "fullname" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20px"
-                          viewBox="0 -960 960 960"
-                          width="20px"
-                          fill="#666666"
-                        >
-                          <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20px"
-                          viewBox="0 -960 960 960"
-                          width="20px"
-                          fill="#666666"
-                        >
-                          <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
-                        </svg>
-                      )
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24px"
-                        viewBox="0 -960 960 960"
-                        width="20px"
-                        fill="#666666"
-                      >
-                        <path d="M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z" />
-                      </svg>
-                    )}
-                  </div>
-                </th>
-                <th onClick={() => handleSort("age")}>
-                  <div className="flex items-center">
-                    Age
-                    {sortConfig.key === "age" ? (
                       sortConfig.direction === "ascending" ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -268,10 +232,10 @@ const PatientList = () => {
                     )}
                   </div>
                 </th>
-                <th onClick={() => handleSort("email")}>
+                <th onClick={() => handleSort("age")}>
                   <div className="flex items-center">
-                    Email
-                    {sortConfig.key === "email" ? (
+                    Age
+                    {sortConfig.key === "age" ? (
                       sortConfig.direction === "ascending" ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -306,10 +270,48 @@ const PatientList = () => {
                     )}
                   </div>
                 </th>
-                <th onClick={() => handleSort("phoneno")}>
+                <th onClick={() => handleSort("resultprediction")}>
                   <div className="flex items-center">
-                    Phone No.
-                    {sortConfig.key === "phoneno" ? (
+                    Prediction
+                    {sortConfig.key === "resultprediction" ? (
+                      sortConfig.direction === "ascending" ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="20px"
+                          viewBox="0 -960 960 960"
+                          width="20px"
+                          fill="#666666"
+                        >
+                          <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="20px"
+                          viewBox="0 -960 960 960"
+                          width="20px"
+                          fill="#666666"
+                        >
+                          <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+                        </svg>
+                      )
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="20px"
+                        fill="#666666"
+                      >
+                        <path d="M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z" />
+                      </svg>
+                    )}
+                  </div>
+                </th>
+                <th onClick={() => handleSort("datetimeprediction")}>
+                  <div className="flex items-center">
+                    Date Prediction
+                    {sortConfig.key === "datetimeprediction" ? (
                       sortConfig.direction === "ascending" ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -356,25 +358,45 @@ const PatientList = () => {
                   </td>
                 </tr>
               ) : (
-                sortedItems.map((patient, key) => (
-                  <tr key={key}>
-                    <td>{indexOfFirstItem + key + 1}.</td>
-                    <td>{patient.fullname}</td>
-                    <td>{patient.age}</td>
-                    <td>{patient.gender}</td>
-                    <td>{patient.email}</td>
-                    <td>{patient.phoneno}</td>
+                sortedItems.map((predict, index) => (
+                  <tr key={index}>
+                    <td>{indexOfFirstItem + index + 1}.</td>
+                    <td>{predict.fullname}</td>
+                    <td>{predict.gender}</td>
+                    <td>{predict.age}</td>
                     <td>
-                      <Link
-                        className="btn btn-sm btn-primary"
-                        to={`/patientupdate/${patient.id}/edit`}
+                      <div
+                        className={`rounded-full w-5/6 py-1 flex justify-center pointer-events-none border-none ${
+                          predict.resultprediction === "Normal"
+                            ? "bg-green-200"
+                            : "bg-red-200"
+                        }`}
                       >
-                        Update Info
-                      </Link>
+                        <span
+                          className={`font-semibold text-${
+                            predict.resultprediction === "Normal"
+                              ? "success"
+                              : "danger"
+                          }`}
+                        >
+                          {predict.resultprediction}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      {moment(predict.datetimeprediction).format("DD MMM YYYY")}
                     </td>
                     <td>
                       <button
-                        onClick={() => handleDeleteClick(patient.id)}
+                        className="btn btn-sm btn-primary"
+                        onClick={() => handlePredictionDetailsClick(predict.id)}
+                      >
+                        Prediction Details
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => handleDeleteClick(predict.id)}
                         className="btn btn-sm btn-error text-white ms-2"
                       >
                         Delete
@@ -385,7 +407,7 @@ const PatientList = () => {
               )}
             </tbody>
           </table>
-          <div className="flex justify-between radio-buttons gap-2 mt-4">
+          <div className="flex justify-between radio-buttons gap-2">
             <div className="w-28 flex justify-start">
               {activePage > 1 && (
                 <div
@@ -464,14 +486,14 @@ const PatientList = () => {
           </div>
         </div>
         <div className="py-4"></div>
+        <PredictDeleteConfirmation
+          show={showModal}
+          handleClose={() => setShowModal(false)}
+          handleConfirm={handleConfirmDelete}
+        />
       </div>
-      <DeleteConfirmation
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        handleConfirm={handleConfirmDelete}
-      />
     </>
   );
 };
 
-export default PatientList;
+export default AllAnalysisLists;

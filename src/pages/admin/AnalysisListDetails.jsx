@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-const DoctorsReportAnalysisDetails = () => {
+const AnalysisListDetails = () => {
   const { id } = useParams();
   const [patientData, setPatientData] = useState(null);
 
@@ -166,4 +166,4 @@ const DoctorsReportAnalysisDetails = () => {
   );
 };
 
-export default DoctorsReportAnalysisDetails;
+export default AnalysisListDetails;

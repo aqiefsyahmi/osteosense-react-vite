@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
@@ -6,9 +7,13 @@ import ManageProfileAdmin from "./pages/admin/ManageProfileAdmin";
 import RegisterDoctorProfile from "./pages/admin/RegisterDoctorProfile";
 import AdminEditDoctors from "./pages/admin/AdminEditDoctors";
 import AdminEditDoctorsDetail from "./pages/admin/AdminEditDoctorsDetail";
+import AdminEditPatientDetails from "./pages/admin/AdminEditPatientDetails";
+import ViewPatientList from "./pages/admin/ViewPatientList";
 import AdminReportAnalysisList from "./pages/admin/AdminReportAnalysisList";
 import AdminReportAnalysis from "./pages/admin/AdminReportAnalysis";
 import AdminReportAnalysisDetails from "./pages/admin/AdminReportAnalysisDetails";
+import AllAnalysisLists from "./pages/admin/AllAnalysisLists";
+import AnalysisListDetails from "./pages/admin/AnalysisListDetails";
 import Doctors from "./pages/doctors/Doctors";
 import ManageProfileDoctors from "./pages/doctors/ManageProfileDoctors";
 import RegisterPatients from "./pages/doctors/RegisterPatients";
@@ -34,7 +39,6 @@ function App() {
     setToken(response.data[tokenKey]);
     setRole(isAdmin ? "admin" : "doctor");
     alert("Successfully Login");
-    localStorage.setItem("email", response.data.email);
     localStorage.setItem("id", response.data.id);
     localStorage.setItem("role", isAdmin ? "admin" : "doctor");
   };
@@ -50,7 +54,6 @@ function App() {
               <Route element={<ProtectedRouteAdmin />}>
                 <Route element={<AdminHeader removeToken={removeToken} />}>
                   <Route path="/admin" element={<Admin />} exact />
-
                   <Route
                     path="/registerdoctorprofile"
                     element={<RegisterDoctorProfile />}
@@ -64,6 +67,14 @@ function App() {
                     element={<AdminEditDoctorsDetail />}
                   />
                   <Route
+                    path="/patientdetailupdate/:id/edit" //
+                    element={<AdminEditPatientDetails />}
+                  />
+                  <Route
+                    path="/viewpatientlist"
+                    element={<ViewPatientList />}
+                  />
+                  <Route
                     path="/adminreportanalysislist"
                     element={<AdminReportAnalysisList />}
                   />
@@ -74,6 +85,14 @@ function App() {
                   <Route
                     path="/adminpredictlistdetails/:id/edit"
                     element={<AdminReportAnalysisDetails />}
+                  />
+                  <Route
+                    path="/allanalysislists"
+                    element={<AllAnalysisLists />}
+                  />
+                  <Route
+                    path="/predictlistdetails/:id/view"
+                    element={<AnalysisListDetails />}
                   />
                   <Route
                     path="/manageprofileadmin/:id/edit"

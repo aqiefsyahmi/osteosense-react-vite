@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DeleteConfirmation from "../../components/DeleteConfirmation";
-import { Link, useNavigate } from "react-router-dom";
 import ItemsPerPageDropdown from "../../components/ItemsPerPageDropdown";
 
-const PatientList = () => {
-  const navigate = useNavigate();
+import { Link } from "react-router-dom";
+
+const ViewPatientList = () => {
   const [patient, setPatient] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [patientIdToDelete, setPatientIdToDelete] = useState(null);
@@ -37,6 +37,7 @@ const PatientList = () => {
     }
     setSortConfig({ key, direction });
   };
+
   const sortedItems = [...patient]
     .filter(
       (item) =>
@@ -67,6 +68,7 @@ const PatientList = () => {
         item.phoneno.toLowerCase().includes(searchQuery.toLowerCase())
     ).length / itemsPerPage
   );
+
   useEffect(() => {
     setActivePage(1); // Reset to first page when search query changes
   }, [searchQuery]);
@@ -74,10 +76,6 @@ const PatientList = () => {
   useEffect(() => {
     getPatient();
   }, []);
-
-  const addPatient = () => {
-    navigate("/registerpatients");
-  };
 
   function getPatient() {
     axios.get("http://127.0.0.1:5000/listpatients").then(function (response) {
@@ -122,22 +120,6 @@ const PatientList = () => {
                 onChange={handleItemsPerPageChange}
               />
             </div>
-            <button
-              className="w-40 btn btn-primary icon-button"
-              onClick={addPatient}
-            >
-              <svg
-                className="icon"
-                xmlns="http://www.w3.org/2000/svg"
-                height="20px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#D1DBFF"
-              >
-                <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" />
-              </svg>
-              Add Patient
-            </button>
           </div>
         </div>
         <div className="bg-[#FFFFFF] w-full border-2 px-4 py-4 drop-shadow-lg rounded-[1.0rem] ">
@@ -367,7 +349,7 @@ const PatientList = () => {
                     <td>
                       <Link
                         className="btn btn-sm btn-primary"
-                        to={`/patientupdate/${patient.id}/edit`}
+                        to={`/patientdetailupdate/${patient.id}/edit`}
                       >
                         Update Info
                       </Link>
@@ -474,4 +456,4 @@ const PatientList = () => {
   );
 };
 
-export default PatientList;
+export default ViewPatientList;
