@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import AdminModalUpdatedMessage from "../../components/AdminModalUpdatedMessage";
+import AdminModalResetConfirmation from "../../components/AdminModalResetConfirmation";
+import AdminModalPasswordNotMatch from "../../components/AdminModalPasswordNotMatch";
 
 export default function ManageProfileAdmin() {
   const navigate = useNavigate();
@@ -11,6 +14,16 @@ export default function ManageProfileAdmin() {
   const [initialInputs, setInitialInputs] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showUpdatedModal, setShowUpdatedModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showPasswordNotMatch, setShowPasswordNotMatch] = useState(false);
+
+  const handleUpdatedMessage = () => {
+    setShowUpdatedModal(true);
+  };
+  const handleShowPasswordNotMatch = () => {
+    setShowPasswordNotMatch(true);
+  };
 
   useEffect(() => {
     getAdmin();
@@ -41,7 +54,7 @@ export default function ManageProfileAdmin() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (inputs.password !== inputs.password_confirm) {
-      alert("Passwords do not match");
+      handleShowPasswordNotMatch();
       return;
     }
 
@@ -49,8 +62,7 @@ export default function ManageProfileAdmin() {
 
     try {
       await axios.put(`http://127.0.0.1:5000/adminupdate/${id}`, updateData);
-      alert("Admin Profile Successfully Updated!");
-      navigate("/admin");
+      handleUpdatedMessage();
     } catch (error) {
       console.error("There was an error updating the admin details!", error);
     }
@@ -65,7 +77,16 @@ export default function ManageProfileAdmin() {
   };
 
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     setInputs(initialInputs);
+    setShowResetModal(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
   };
 
   return (
@@ -188,7 +209,7 @@ export default function ManageProfileAdmin() {
             </div>
           </div>
           <div className="flex justify-center gap-4">
-            <button className="w-40 btn btn-sm btn-primary">Save</button>
+            <button className="w-40 btn btn-sm btn-primary">Update</button>
             <button
               className="w-40 btn btn-sm btn-outline btn-error btn-hover-white"
               type="button"
@@ -199,6 +220,19 @@ export default function ManageProfileAdmin() {
           </div>
         </form>
       </div>
+      <AdminModalUpdatedMessage
+        show={showUpdatedModal}
+        handleClose={() => setShowUpdatedModal(false)}
+      />
+      <AdminModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
+      <AdminModalPasswordNotMatch
+        show={showPasswordNotMatch}
+        handleClose={() => setShowPasswordNotMatch(false)}
+      />
     </>
   );
 }

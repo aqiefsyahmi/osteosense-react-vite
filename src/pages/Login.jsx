@@ -2,6 +2,7 @@ import { useState } from "react";
 import loginPageImage from "../image/loginpage.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ModalFailedLogin from "../components/ModalFailedLogin";
 
 // eslint-disable-next-line react/prop-types
 export default function Login({ handleLogin }) {
@@ -12,6 +13,7 @@ export default function Login({ handleLogin }) {
   });
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showFailedMessage, setShowFailedMessage] = useState(false);
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -19,6 +21,9 @@ export default function Login({ handleLogin }) {
       ...prevNote,
       [name]: value,
     }));
+  };
+  const handleShowFailedMessage = () => {
+    setShowFailedMessage(true);
   };
 
   const handleTogglePassword = () => {
@@ -41,7 +46,7 @@ export default function Login({ handleLogin }) {
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
-          alert("Invalid credentials");
+          handleShowFailedMessage();
         }
       });
 
@@ -171,6 +176,10 @@ export default function Login({ handleLogin }) {
           </div>
         </div>
       </div>
+      <ModalFailedLogin
+        show={showFailedMessage}
+        handleClose={() => setShowFailedMessage(false)}
+      />
     </div>
   );
 }

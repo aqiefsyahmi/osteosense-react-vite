@@ -7,7 +7,7 @@ const DeleteConfirmation = ({ show, handleClose, handleConfirm }) => {
       <Modal.Header closeButton>
         <Modal.Title>Confirm Deletion</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Are you sure you want to delete this account?</Modal.Body>
+      <Modal.Body>Are you sure you want to delete this profile?</Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleClose}>
           Cancel

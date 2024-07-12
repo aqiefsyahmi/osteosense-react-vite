@@ -3,6 +3,7 @@ import axios from "axios";
 import DeleteConfirmation from "../../components/DeleteConfirmation";
 import { Link, useNavigate } from "react-router-dom";
 import ItemsPerPageDropdown from "../../components/ItemsPerPageDropdown";
+import AdminModalConfirmDeletedMessage from "../../components/AdminModalConfirmDeletedMessage";
 
 const AdminEditDoctors = () => {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ const AdminEditDoctors = () => {
   const [doctorIdToDelete, setDoctorIdToDelete] = useState(null);
   const [activePage, setActivePage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6); // Number of items to show per page
+  const [showDeletedMessageModal, setShowDeletedMessageModal] = useState(false);
+
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -27,6 +30,9 @@ const AdminEditDoctors = () => {
       setDoctor(response.data);
     });
   }
+  const handleDeletedMessage = () => {
+    setShowDeletedMessageModal(true);
+  };
 
   const handleDeleteClick = (id) => {
     setDoctorIdToDelete(id);
@@ -45,7 +51,7 @@ const AdminEditDoctors = () => {
         console.error("There was an error deleting the doctor!", error);
       });
     setShowModal(false);
-    alert("Successfully Deleted");
+    handleDeletedMessage();
   };
 
   const addDoctor = () => {
@@ -427,6 +433,10 @@ const AdminEditDoctors = () => {
         </div>
         <div className="py-4"></div>
       </div>
+      <AdminModalConfirmDeletedMessage
+        show={showDeletedMessageModal}
+        handleClose={() => setShowDeletedMessageModal(false)}
+      />
       <DeleteConfirmation
         show={showModal}
         handleClose={() => setShowModal(false)}

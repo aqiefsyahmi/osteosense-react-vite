@@ -1,9 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import AdminModalSubmittedMessage from "../../components/AdminModalSubmittedMessage";
+import AdminModalResetConfirmation from "../../components/AdminModalResetConfirmation";
+import AdminModalPasswordNotMatch from "../../components/AdminModalPasswordNotMatch";
 
 const RegisterDoctorProfile = () => {
-  const navigate = useNavigate();
+  const [showSubmittedModal, setShowSubmittedModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showPasswordNotMatch, setShowPasswordNotMatch] = useState(false);
 
   // Initialize state for form inputs
   const [inputs, setInputs] = useState({
@@ -21,7 +25,29 @@ const RegisterDoctorProfile = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
+  const handleSubmittedMessage = () => {
+    setShowSubmittedModal(true);
+  };
+
+  const handleShowPasswordNotMatch = () => {
+    setShowPasswordNotMatch(true);
+  };
+
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+  // const handleReset = () => {
+  //   setInputs({
+  //     fullname: "",
+  //     username: "",
+  //     email: "",
+  //     password: "",
+  //     confirmPassword: "",
+  //     phoneno: "",
+  //   });
+  // };
+
+  const handleConfirmReset = () => {
     setInputs({
       fullname: "",
       username: "",
@@ -30,6 +56,11 @@ const RegisterDoctorProfile = () => {
       confirmPassword: "",
       phoneno: "",
     });
+    setShowResetModal(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
   };
 
   // Toggle password visibility
@@ -53,7 +84,7 @@ const RegisterDoctorProfile = () => {
     event.preventDefault();
 
     if (inputs.password !== inputs.confirmPassword) {
-      alert("Passwords do not match");
+      handleShowPasswordNotMatch();
       return;
     }
 
@@ -61,8 +92,7 @@ const RegisterDoctorProfile = () => {
       .post("http://127.0.0.1:5000/signupdoctor", inputs)
       .then(function (response) {
         console.log(response.data);
-        alert("Doctor Successfully Registered");
-        navigate("/admin");
+        handleSubmittedMessage();
       })
       .catch(function (error) {
         console.error("There was an error creating the user!", error);
@@ -102,7 +132,7 @@ const RegisterDoctorProfile = () => {
             <div>
               <div className="font-bold text-lg">Email</div>
               <input
-                type="text"
+                type="email"
                 className="form-control mt-2"
                 name="email"
                 value={inputs.email}
@@ -226,6 +256,19 @@ const RegisterDoctorProfile = () => {
           </div>
         </form>
       </div>
+      <AdminModalSubmittedMessage
+        show={showSubmittedModal}
+        handleClose={() => setShowSubmittedModal(false)}
+      />
+      <AdminModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
+      <AdminModalPasswordNotMatch
+        show={showPasswordNotMatch}
+        handleClose={() => setShowPasswordNotMatch(false)}
+      />
     </>
   );
 };

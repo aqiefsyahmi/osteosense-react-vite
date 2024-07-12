@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PredictDeleteConfirmation from "../../components/PredictDeleteConfirmation";
 import ItemsPerPageDropdown from "../../components/ItemsPerPageDropdown";
+import AdminModalConfirmDeletedMessage from "../../components/AdminModalConfirmDeletedMessage";
 
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -12,6 +13,7 @@ const AdminReportAnalysis = () => {
   const [doctorName, setDoctorName] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [predictIdToDelete, setPredictIDToDelete] = useState(null);
+  const [showDeletedMessageModal, setShowDeletedMessageModal] = useState(false);
 
   //for show list table
   const [itemsPerPage, setItemsPerPage] = useState(6);
@@ -26,6 +28,10 @@ const AdminReportAnalysis = () => {
   const handleItemsPerPageChange = (value) => {
     setItemsPerPage(value);
     setActivePage(1); // Reset to first page when changing items per page
+  };
+
+  const handleDeletedMessage = () => {
+    setShowDeletedMessageModal(true);
   };
 
   //handle sort ascending descending
@@ -125,7 +131,7 @@ const AdminReportAnalysis = () => {
         console.error("There was an error deleting the doctor!", error);
       });
     setShowModal(false);
-    alert("Successfully Deleted");
+    handleDeletedMessage();
   };
 
   return (
@@ -422,6 +428,10 @@ const AdminReportAnalysis = () => {
         show={showModal}
         handleClose={() => setShowModal(false)}
         handleConfirm={handleConfirmDelete}
+      />
+      <AdminModalConfirmDeletedMessage
+        show={showDeletedMessageModal}
+        handleClose={() => setShowDeletedMessageModal(false)}
       />
     </>
   );

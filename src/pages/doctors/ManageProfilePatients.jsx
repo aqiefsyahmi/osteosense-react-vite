@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import GenderDropdown from "../../components/GenderDropdown";
+import ModalUpdatedMessage from "../../components/ModalUpdatedMessage";
+import ModalResetConfirmation from "../../components/ModalResetConfirmation";
 
 const ManageProfilePatients = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const [showUpdatedModal, setShowUpdatedModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const [genderDropdownKey, setGenderDropdownKey] = useState(0);
 
@@ -28,6 +31,10 @@ const ManageProfilePatients = () => {
   useEffect(() => {
     getPatient();
   }, []);
+
+  const handleUpdatedMessage = () => {
+    setShowUpdatedModal(true);
+  };
 
   const getPatient = async () => {
     try {
@@ -58,16 +65,24 @@ const ManageProfilePatients = () => {
     }
     try {
       await axios.put(`http://127.0.0.1:5000/patientupdate/${id}`, inputs);
-      alert("Patient Profile Successfully Updated!");
-      navigate("/doctors");
+      handleUpdatedMessage();
     } catch (error) {
       console.error("There was an error updating the patient details!", error);
     }
   };
 
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     setInputs(initialInputs);
     setGenderDropdownKey((prevKey) => prevKey + 1);
+    setShowResetModal(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
   };
 
   return (
@@ -153,6 +168,15 @@ const ManageProfilePatients = () => {
           </div>
         </form>
       </div>
+      <ModalUpdatedMessage
+        show={showUpdatedModal}
+        handleClose={() => setShowUpdatedModal(false)}
+      />
+      <ModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
     </>
   );
 };

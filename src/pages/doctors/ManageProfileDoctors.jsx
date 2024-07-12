@@ -1,19 +1,31 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ModalUpdatedMessage from "../../components/ModalUpdatedMessage";
+import ModalResetConfirmation from "../../components/ModalResetConfirmation";
+import ModalPasswordNotMatch from "../../components/ModalPasswordNotMatch";
 
 export default function ManageProfileDoctors() {
-  const navigate = useNavigate();
   const { id } = useParams();
 
   const [inputs, setInputs] = useState([]);
   const [initialInputs, setInitialInputs] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showUpdatedModal, setShowUpdatedModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showPasswordNotMatch, setShowPasswordNotMatch] = useState(false);
 
   useEffect(() => {
     getDoctor();
   }, []);
+
+  const handleUpdatedMessage = () => {
+    setShowUpdatedModal(true);
+  };
+  const handleShowPasswordNotMatch = () => {
+    setShowPasswordNotMatch(true);
+  };
 
   const getDoctor = async () => {
     try {
@@ -40,7 +52,7 @@ export default function ManageProfileDoctors() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (inputs.password !== inputs.password_confirm) {
-      alert("Passwords do not match");
+      handleShowPasswordNotMatch();
       return;
     }
 
@@ -48,8 +60,7 @@ export default function ManageProfileDoctors() {
 
     try {
       await axios.put(`http://127.0.0.1:5000/doctorupdate/${id}`, updateData);
-      alert("Doctor Profile Successfully Updated!");
-      navigate("/doctors");
+      handleUpdatedMessage();
     } catch (error) {
       console.error("There was an error updating the doctor details!", error);
     }
@@ -66,7 +77,16 @@ export default function ManageProfileDoctors() {
   };
 
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     setInputs(initialInputs);
+    setShowResetModal(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
   };
 
   return (
@@ -226,6 +246,19 @@ export default function ManageProfileDoctors() {
           </div>
         </form>
       </div>
+      <ModalUpdatedMessage
+        show={showUpdatedModal}
+        handleClose={() => setShowUpdatedModal(false)}
+      />
+      <ModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
+      <ModalPasswordNotMatch
+        show={showPasswordNotMatch}
+        handleClose={() => setShowPasswordNotMatch(false)}
+      />
     </>
   );
 }

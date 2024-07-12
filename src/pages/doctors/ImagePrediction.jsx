@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import moment from "moment-timezone";
 import Select from "react-select";
+import ModalSuccessMessageDoctor from "../../components/ModalSuccessMessageDoctor";
+import ModalResetConfirmation from "../../components/ModalResetConfirmation";
 
 export default function ImagePrediction() {
   const [patients, setPatients] = useState([]);
@@ -22,9 +23,10 @@ export default function ImagePrediction() {
   const [selectedPatient, setSelectedPatient] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
-  const navigate = useNavigate();
   const id = localStorage.getItem("id");
   const token = localStorage.getItem("token");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   useEffect(() => {
     getDoctors();
@@ -159,6 +161,9 @@ export default function ImagePrediction() {
       }));
     }
   };
+  const handleSuccessMessage = () => {
+    setShowSuccessModal(true);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -180,7 +185,7 @@ export default function ImagePrediction() {
       })
       .then((response) => {
         console.log(response.data);
-        alert("Prediction Successfully Submitted");
+        // alert("Prediction Successfully Submitted");
         // Reset form fields after successful submission
         setInputs({
           fullname: "",
@@ -197,7 +202,7 @@ export default function ImagePrediction() {
         setSelectedPatient(""); // Reset selected patient
         setImagePreviewUrl(""); // Clear image preview
         document.getElementById("file-upload").value = null; // Clear file input field
-        navigate("/doctors");
+        handleSuccessMessage();
       })
       .catch((error) => {
         console.error("There was an error creating the prediction!", error);
@@ -205,6 +210,10 @@ export default function ImagePrediction() {
   };
 
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     setInputs({
       fullname: "",
       age: "",
@@ -220,7 +229,30 @@ export default function ImagePrediction() {
     setSelectedPatient("");
     setImagePreviewUrl(""); // Clear image preview
     document.getElementById("file-upload").value = null; // Clear file input field
+    setShowResetModal(false);
   };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
+  };
+
+  // const handleReset = () => {
+  //   setInputs({
+  //     fullname: "",
+  //     age: "",
+  //     gender: "",
+  //     email: "",
+  //     phoneno: "",
+  //     doctorid: inputs.doctorid,
+  //     datetimeprediction: "", // Reset datetimeprediction to current Malaysia time
+  //     resultprediction: "",
+  //     imageprediction: "",
+  //   });
+  //   setSelectedFile(null);
+  //   setSelectedPatient("");
+  //   setImagePreviewUrl(""); // Clear image preview
+  //   document.getElementById("file-upload").value = null; // Clear file input field
+  // };
 
   //for custondropdown andimation
   const customDropdownIndicator = ({ isDropdownOpen }) => (
@@ -469,6 +501,15 @@ export default function ImagePrediction() {
           </div>
         </form>
       </div>
+      <ModalSuccessMessageDoctor
+        show={showSuccessModal}
+        handleClose={() => setShowSuccessModal(false)}
+      />
+      <ModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
     </>
   );
 }

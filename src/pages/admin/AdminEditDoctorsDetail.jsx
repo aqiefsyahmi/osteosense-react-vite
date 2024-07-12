@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import AdminModalUpdatedMessage from "../../components/AdminModalUpdatedMessage";
+import AdminModalResetConfirmation from "../../components/AdminModalResetConfirmation";
+import AdminModalPasswordNotMatch from "../../components/AdminModalPasswordNotMatch";
 
 const AdminEditDoctorsDetail = () => {
   const navigate = useNavigate();
@@ -11,6 +14,9 @@ const AdminEditDoctorsDetail = () => {
   const [initialInputs, setInitialInputs] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showUpdatedModal, setShowUpdatedModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showPasswordNotMatch, setShowPasswordNotMatch] = useState(false);
 
   useEffect(() => {
     getDoctor();
@@ -38,10 +44,18 @@ const AdminEditDoctorsDetail = () => {
     setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
   };
 
+  const handleUpdatedMessage = () => {
+    setShowUpdatedModal(true);
+  };
+
+  const handleShowPasswordNotMatch = () => {
+    setShowPasswordNotMatch(true);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (inputs.password !== inputs.password_confirm) {
-      alert("Passwords do not match");
+      handleShowPasswordNotMatch();
       return;
     }
 
@@ -49,15 +63,23 @@ const AdminEditDoctorsDetail = () => {
 
     try {
       await axios.put(`http://127.0.0.1:5000/doctorupdate/${id}`, updateData);
-      alert("Doctor Profile Successfully Updated!");
-      navigate("/admineditdoctors");
+      handleUpdatedMessage();
     } catch (error) {
       console.error("There was an error updating the doctor details!", error);
     }
   };
 
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     setInputs(initialInputs);
+    setShowResetModal(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
   };
 
   const handleTogglePassword = () => {
@@ -223,6 +245,19 @@ const AdminEditDoctorsDetail = () => {
           </div>
         </form>
       </div>
+      <AdminModalUpdatedMessage
+        show={showUpdatedModal}
+        handleClose={() => setShowUpdatedModal(false)}
+      />
+      <AdminModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
+      <AdminModalPasswordNotMatch
+        show={showPasswordNotMatch}
+        handleClose={() => setShowPasswordNotMatch(false)}
+      />
     </>
   );
 };

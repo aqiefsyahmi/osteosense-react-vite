@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PredictDeleteConfirmation from "../../components/PredictDeleteConfirmation";
 import moment from "moment-timezone";
 import ItemsPerPageDropdown from "../../components/ItemsPerPageDropdown";
+import ModalConfirmDeletedMessage from "../../components/ModalConfirmDeletedMessage";
 
 const DoctorsReportAnalysis = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const DoctorsReportAnalysis = () => {
     direction: "ascending",
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDeletedMessageModal, setShowDeletedMessageModal] = useState(false);
 
   useEffect(() => {
     getDoctorAndPredict();
@@ -52,6 +54,10 @@ const DoctorsReportAnalysis = () => {
     setShowModal(true);
   };
 
+  const handleDeletedMessage = () => {
+    setShowDeletedMessageModal(true);
+  };
+
   const handleConfirmDelete = async () => {
     try {
       await axios.delete(
@@ -63,11 +69,11 @@ const DoctorsReportAnalysis = () => {
         }
       );
       getDoctorAndPredict();
-      alert("Successfully Deleted");
     } catch (error) {
       console.error("There was an error deleting the prediction!", error);
     }
     setShowModal(false);
+    handleDeletedMessage();
   };
 
   const handlePageClick = (page) => {
@@ -501,6 +507,10 @@ const DoctorsReportAnalysis = () => {
           handleConfirm={handleConfirmDelete}
         />
       </div>
+      <ModalConfirmDeletedMessage
+        show={showDeletedMessageModal}
+        handleClose={() => setShowDeletedMessageModal(false)}
+      />
     </>
   );
 };

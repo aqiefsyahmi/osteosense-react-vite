@@ -27,18 +27,24 @@ import AdminHeader from "./components/AdminHeader";
 import DoctorsHeader from "./components/DoctorsHeader";
 import ProtectedRouteAdmin from "./router/ProtectedRouteAdmin";
 import ProtectedRouteDoctors from "./router/ProtectedRouteDoctors";
+import ModalSuccessLogin from "./components/ModalSuccessLogin";
 import NotFoundPage from "./router/NotFoundPage";
 import "./components/CustomStyle.css";
 
 function App() {
   const { token, removeToken, setToken } = useToken();
   const [role, setRole] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const handleShowSuccessMessage = () => {
+    setShowSuccessModal(true);
+  };
 
   const handleLogin = (response, isAdmin) => {
     const tokenKey = isAdmin ? "admin_token" : "doctor_token";
     setToken(response.data[tokenKey]);
     setRole(isAdmin ? "admin" : "doctor");
-    alert("Successfully Login");
+    handleShowSuccessMessage();
     localStorage.setItem("id", response.data.id);
     localStorage.setItem("role", isAdmin ? "admin" : "doctor");
   };
@@ -138,6 +144,10 @@ function App() {
           </>
         )}
       </Router>
+      <ModalSuccessLogin
+        show={showSuccessModal}
+        handleClose={() => setShowSuccessModal(false)}
+      />
     </div>
   );
 }

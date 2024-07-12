@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PredictDeleteConfirmation from "../../components/PredictDeleteConfirmation";
 import moment from "moment-timezone";
 import ItemsPerPageDropdown from "../../components/ItemsPerPageDropdown";
+import AdminModalConfirmDeletedMessage from "../../components/AdminModalConfirmDeletedMessage";
 
 const AllAnalysisLists = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const AllAnalysisLists = () => {
   const [showModal, setShowModal] = useState(false);
   const [predictToDelete, setPredictToDelete] = useState(null);
   const idtoken = localStorage.getItem("id");
+  const [showDeletedMessageModal, setShowDeletedMessageModal] = useState(false);
 
   // Pagination and sorting states
   const [itemsPerPage, setItemsPerPage] = useState(6);
@@ -28,6 +30,10 @@ const AllAnalysisLists = () => {
   useEffect(() => {
     setActivePage(1); // Reset to first page when search query changes
   }, [searchQuery]);
+
+  const handleDeletedMessage = () => {
+    setShowDeletedMessageModal(true);
+  };
 
   function getAllAnalysisLists() {
     axios.get("http://127.0.0.1:5000/listpredict").then(function (response) {
@@ -56,7 +62,7 @@ const AllAnalysisLists = () => {
         }
       );
       getAllAnalysisLists();
-      alert("Successfully Deleted");
+      handleDeletedMessage();
     } catch (error) {
       console.error("There was an error deleting the prediction!", error);
     }
@@ -490,6 +496,10 @@ const AllAnalysisLists = () => {
           show={showModal}
           handleClose={() => setShowModal(false)}
           handleConfirm={handleConfirmDelete}
+        />
+        <AdminModalConfirmDeletedMessage
+          show={showDeletedMessageModal}
+          handleClose={() => setShowDeletedMessageModal(false)}
         />
       </div>
     </>

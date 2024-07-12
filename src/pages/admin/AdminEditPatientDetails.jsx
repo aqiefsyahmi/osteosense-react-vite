@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import GenderDropdown from "../../components/GenderDropdown";
+import AdminModalUpdatedMessage from "../../components/AdminModalUpdatedMessage";
+import AdminModalResetConfirmation from "../../components/AdminModalResetConfirmation";
 
 const AdminEditPatientDetails = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const [showUpdatedModal, setShowUpdatedModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   const [genderDropdownKey, setGenderDropdownKey] = useState(0);
 
@@ -50,6 +53,10 @@ const AdminEditPatientDetails = () => {
     setInputs((prevInputs) => ({ ...prevInputs, [name]: value }));
   };
 
+  const handleUpdatedMessage = () => {
+    setShowUpdatedModal(true);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (inputs.age < 1) {
@@ -58,16 +65,24 @@ const AdminEditPatientDetails = () => {
     }
     try {
       await axios.put(`http://127.0.0.1:5000/patientupdate/${id}`, inputs);
-      alert("Patient Profile Successfully Updated!");
-      navigate("/admin");
+      handleUpdatedMessage();
     } catch (error) {
       console.error("There was an error updating the patient details!", error);
     }
   };
 
   const handleReset = () => {
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     setInputs(initialInputs);
     setGenderDropdownKey((prevKey) => prevKey + 1);
+    setShowResetModal(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetModal(false);
   };
 
   return (
@@ -153,6 +168,15 @@ const AdminEditPatientDetails = () => {
           </div>
         </form>
       </div>
+      <AdminModalUpdatedMessage
+        show={showUpdatedModal}
+        handleClose={() => setShowUpdatedModal(false)}
+      />
+      <AdminModalResetConfirmation
+        show={showResetModal}
+        handleClose={handleCancelReset}
+        handleConfirm={handleConfirmReset}
+      />
     </>
   );
 };
